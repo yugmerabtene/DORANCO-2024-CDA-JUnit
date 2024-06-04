@@ -1,5 +1,3 @@
-### Tests en Java
-
 #### Jour 1: MODULE-01 - Introduction et Tests Unitaires en Java
 **Durée: 8 heures**
 
@@ -111,12 +109,12 @@
 
 ---
 
-#### Jour 4: MODULE-04 - Tests de Non-Régression
+#### Jour 4: MODULE-04 - Tests de Non-Régression avec GitHub Actions
 **Durée: 8 heures**
 
 **Objectifs:**
 - Comprendre les tests de non-régression
-- Utiliser Jenkins pour l'automatisation des tests
+- Utiliser GitHub Actions pour l'automatisation des tests
 
 **Contenu:**
 
@@ -124,24 +122,28 @@
    - Partie 1: Importance des tests de non-régression (30 minutes)
    - Partie 2: Stratégies de mise en place (30 minutes)
 
-2. **Automatisation avec Jenkins (3 heures)**
-   - Partie 1: Installation et configuration de Jenkins (1 heure)
-   - Partie 2: Création de jobs Jenkins (1 heure)
-   - Partie 3: Configuration de pipelines Jenkins (1 heure)
+2. **Automatisation avec GitHub Actions (3 heures)**
+   - Partie 1: Introduction à GitHub Actions (1 heure)
+     - Concepts de base
+     - Avantages de GitHub Actions
+   - Partie 2: Création de workflows GitHub Actions (1 heure)
+     - Syntaxe et configuration de base
+   - Partie 3: Configuration de runners GitHub (1 heure)
+     - Types de runners (hébergés par GitHub vs auto-hébergés)
 
 3. **Écriture de Tests de Non-Régression (2 heures)**
    - Partie 1: Réutilisation des tests unitaires et fonctionnels (1 heure)
-   - Partie 2: Ajout des tests dans Jenkins (1 heure)
+   - Partie 2: Ajout des tests dans les workflows GitHub Actions (1 heure)
 
 **Pause déjeuner (1 heure)**
 
 4. **Exemples Pratiques (1 heure)**
-   - Partie 1: Configuration d'un pipeline CI/CD (30 minutes)
+   - Partie 1: Configuration d'un workflow CI/CD (30 minutes)
    - Partie 2: Déclenchement automatique des tests (30 minutes)
 
 5. **Outils et Pratiques Recommandées (1 heure)**
-   - Partie 1: Utilisation de plugins Jenkins (JUnit, Selenium, etc.) (30 minutes)
-   - Partie 2: Surveillance et analyse des résultats de tests (30 minutes)
+   - Partie 1: Surveillance et analyse des résultats de tests (30 minutes)
+   - Partie 2: Utilisation des artefacts et des rapports de tests (30 minutes)
 
 ---
 
@@ -181,10 +183,10 @@
 - Documentation JUnit
 - Documentation Selenium
 - OWASP ZAP User Guide
-- Jenkins User Documentation
+- GitHub Actions Documentation
 - JMeter User Guide
 
 ### Exercice Pratique
 1. Créez un projet Java simple.
 2. Écrivez des tests unitaires, fonctionnels, de sécurité, et de non-régression.
-3. Intégrez ces tests dans un pipeline Jenkins.
+3. Intégrez ces tests dans un pipeline GitHub Actions.
