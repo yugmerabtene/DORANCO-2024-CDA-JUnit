@@ -192,7 +192,7 @@
 3. Intégrez ces tests dans un pipeline GitHub Actions.
 
 ----
-MODULE-01 : 
+# MODULE-01 : 
 Le Développement Piloté par les Tests (Test-Driven Development ou TDD) est une méthodologie de développement de logiciels où les tests sont écrits avant que le code de production soit développé. L'idée est de d'abord écrire un test qui échoue (car la fonctionnalité n'est pas encore implémentée), puis d'écrire le minimum de code nécessaire pour faire passer le test, et enfin de refactorer le code pour améliorer sa structure tout en s'assurant que les tests continuent de passer.
 
 ### Les Étapes du TDD
