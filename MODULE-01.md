@@ -19,8 +19,6 @@
    - Ils aident à identifier les bugs tôt dans le cycle de développement, ce qui réduit le coût et le temps nécessaires pour les corriger.
    - Les tests unitaires facilitent la maintenance du code en permettant de vérifier que les modifications n'introduisent pas de régressions.
 
-
-
 #### Partie 2 : Principes de base des tests unitaires (1 heure)
 
 1. **Définitions et concepts**
@@ -256,6 +254,8 @@ Les annotations dans JUnit sont utilisées pour définir le comportement des mé
            calculator = null;
        }
 
+
+
        @BeforeAll
        public static void initAll() {
            System.out.println("Tests démarrés");
@@ -285,8 +285,8 @@ Les annotations dans JUnit sont utilisées pour définir le comportement des mé
            }, "Division par zéro doit lancer une IllegalArgumentException");
        }
    }
-```
-```
+   ```
+
 ### Pause déjeuner (1 heure)
 
 ### Exemples Pratiques (1 heure)
@@ -535,9 +535,7 @@ JaCoCo est un outil de couverture de code qui vous aide à voir quelles parties 
    jacocoTestReport {
        reports {
            xml.enabled true
-           html
-
-.enabled true
+           html.enabled true
        }
    }
    ```
@@ -561,15 +559,11 @@ JaCoCo est un outil de couverture de code qui vous aide à voir quelles parties 
 
 3. **Visualiser les résultats :**
 
-   Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couverture ou le dossier `build/reports/jacoco/test/html/index.html` pour Gradle. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
+   Ouvrez le fichier `target/site/j
 
+acoco/index.html` pour voir le rapport de couverture ou le dossier `build/reports/jacoco/test/html/index.html` pour Gradle. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
 
-----
-
-![image](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/98552ac1-3e97-4088-b9c2-f715c6624541)
-
-
-### 2. **Cycle de Développement avec Tests (TDD - Test Driven Development)**
+### Cycle de Développement avec Tests (TDD - Test Driven Development)
 
 #### Qu'est-ce que le TDD ?
 
@@ -581,9 +575,6 @@ Le **Test Driven Development (TDD)**, ou développement dirigé par les tests, e
 - **Réduction des Bugs** : Les tests écrits avant le code aident à identifier et corriger les bugs dès les premières phases du développement.
 - **Confiance dans les Refactorisations** : Avec des tests en place, les développeurs peuvent refactoriser le code en toute confiance, sachant que les tests vérifieront que les modifications n'ont pas introduit de nouveaux bugs.
 - **Documentation Vivante** : Les tests servent de documentation vivante sur le comportement attendu du code.
-
-![image](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/86673b93-63f1-4941-ac61-c45594d7509e)
-
 
 #### Le Cycle TDD Typique
 
@@ -627,7 +618,9 @@ Le cycle TDD typique est divisé en trois étapes principales, souvent appelées
    - **Objectif** : Améliorer la qualité du code sans modifier son comportement externe. Les tests existants garantissent que les modifications n'ont pas introduit de régressions.
    - **Exemple** : Dans cet exemple simple, il n'y aurait peut-être pas grand-chose à refactoriser. Mais dans des cas plus complexes, vous pourriez organiser votre code en méthodes plus petites, renommer des variables pour une meilleure clarté, ou éliminer du code dupliqué.
 
----
+
+
+![image](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/e8e0446f-636c-4adb-8094-95de8b790bac)
 
 ### Exemple Complet du Cycle TDD
 
@@ -715,5 +708,5 @@ Pour mieux illustrer le cycle TDD, reprenons l'exemple de la calculatrice avec u
      }
      ```
 
-
+     ![image](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/c26a7209-a8f6-4de9-aa54-d0eef77aa3ba)
 
