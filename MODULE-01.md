@@ -710,3 +710,320 @@ Pour mieux illustrer le cycle TDD, reprenons l'exemple de la calculatrice avec u
 
      ![image](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/c26a7209-a8f6-4de9-aa54-d0eef77aa3ba)
 
+
+
+### Enoncé du Mini-Projet : Gestionnaire de Bibliothèque
+
+**Objectif :** Développer un gestionnaire de bibliothèque simple qui permet d'ajouter des livres, de les emprunter et de les retourner. Le projet sera développé en suivant la méthodologie TDD (Test Driven Development).
+
+**Fonctionnalités :**
+1. Ajouter un livre à la bibliothèque.
+2. Emprunter un livre.
+3. Retourner un livre.
+4. Vérifier la disponibilité d'un livre.
+
+**Contexte et Description :**
+
+Dans ce mini-projet, nous allons créer une application Java simple pour gérer une collection de livres dans une bibliothèque. L'application doit permettre d'ajouter des livres, de les emprunter, de les retourner, et de vérifier leur disponibilité. Nous allons utiliser JUnit pour écrire des tests unitaires et suivre la méthodologie TDD.
+
+**Étapes de Développement :**
+
+1. **Écrire les tests pour chaque fonctionnalité (Rouge).**
+2. **Écrire le code pour faire passer les tests (Vert).**
+3. **Refactoriser le code (Refactor).**
+
+### Étape 1 : Écriture des Tests (Rouge)
+
+Nous allons commencer par écrire des tests pour chaque fonctionnalité sans implémenter le code de production. Chaque test va échouer initialement car les fonctionnalités n'existent pas encore.
+
+#### Test 1 : Ajouter un livre
+
+**Description :** Ce test vérifie que lorsqu'un livre est ajouté à la bibliothèque, il est disponible.
+
+```java
+@Test
+public void testAddBook() {
+    libraryManager.addBook("1984", "George Orwell");
+    assertTrue(libraryManager.isBookAvailable("1984"), "Le livre doit être disponible après ajout");
+}
+```
+
+**Explication :**
+- **Pré-condition :** Un nouveau gestionnaire de bibliothèque est créé.
+- **Action :** Ajout du livre "1984" de George Orwell.
+- **Post-condition :** Vérifie que le livre est disponible en utilisant la méthode `isBookAvailable`.
+
+#### Test 2 : Emprunter un livre
+
+**Description :** Ce test vérifie que lorsqu'un livre est emprunté, il n'est plus disponible dans la bibliothèque.
+
+```java
+@Test
+public void testBorrowBook() {
+    libraryManager.addBook("1984", "George Orwell");
+    libraryManager.borrowBook("1984");
+    assertFalse(libraryManager.isBookAvailable("1984"), "Le livre ne doit plus être disponible après emprunt");
+}
+```
+
+**Explication :**
+- **Pré-condition :** Le livre "1984" est ajouté à la bibliothèque.
+- **Action :** Emprunt du livre "1984".
+- **Post-condition :** Vérifie que le livre n'est plus disponible en utilisant la méthode `isBookAvailable`.
+
+#### Test 3 : Retourner un livre
+
+**Description :** Ce test vérifie que lorsqu'un livre est retourné après avoir été emprunté, il redevient disponible.
+
+```java
+@Test
+public void testReturnBook() {
+    libraryManager.addBook("1984", "George Orwell");
+    libraryManager.borrowBook("1984");
+    libraryManager.returnBook("1984");
+    assertTrue(libraryManager.isBookAvailable("1984"), "Le livre doit être disponible après retour");
+}
+```
+
+**Explication :**
+- **Pré-condition :** Le livre "1984" est ajouté puis emprunté.
+- **Action :** Retour du livre "1984".
+- **Post-condition :** Vérifie que le livre est de nouveau disponible en utilisant la méthode `isBookAvailable`.
+
+#### Test 4 : Vérifier la disponibilité d'un livre
+
+**Description :** Ce test vérifie la fonctionnalité de vérification de la disponibilité d'un livre.
+
+```java
+@Test
+public void testIsBookAvailable() {
+    libraryManager.addBook("1984", "George Orwell");
+    assertTrue(libraryManager.isBookAvailable("1984"), "Le livre doit être disponible");
+    libraryManager.borrowBook("1984");
+    assertFalse(libraryManager.isBookAvailable("1984"), "Le livre ne doit plus être disponible");
+}
+```
+
+**Explication :**
+- **Pré-condition :** Le livre "1984" est ajouté.
+- **Action 1 :** Vérifie la disponibilité du livre après ajout.
+- **Action 2 :** Emprunt du livre "1984".
+- **Post-condition :** Vérifie que le livre n'est plus disponible après emprunt.
+
+### Étape 2 : Écriture du Code (Vert)
+
+Nous allons maintenant écrire le code pour implémenter les fonctionnalités nécessaires afin de faire passer les tests.
+
+```java
+// Fichier: LibraryManager.java
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * La classe LibraryManager gère une collection de livres, permettant d'ajouter, emprunter et retourner des livres.
+ */
+public class LibraryManager {
+    private Map<String, Boolean> books;
+
+    /**
+     * Initialise un nouveau gestionnaire de bibliothèque.
+     */
+    public LibraryManager() {
+        books = new HashMap<>();
+    }
+
+    /**
+     * Ajoute un livre à la bibliothèque.
+     *
+     * @param title  le titre du livre
+     * @param author l'auteur du livre
+     */
+    public void addBook(String title, String author) {
+        books.put(title, true);
+    }
+
+    /**
+     * Emprunte un livre de la bibliothèque.
+     *
+     * @param title le titre du livre à emprunter
+     * @return true si le livre a été emprunté, false sinon
+     */
+    public boolean borrowBook(String title) {
+        if (isBookAvailable(title)) {
+            books.put(title, false);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Retourne un livre à la bibliothèque.
+     *
+     * @param title le titre du livre à retourner
+     */
+    public void returnBook(String title) {
+        if (books.containsKey(title)) {
+            books.put(title, true);
+        }
+    }
+
+    /**
+     * Vérifie si un livre est disponible à l'emprunt.
+     *
+     * @param title le titre du livre
+     * @return true si le livre est disponible, false sinon
+     */
+    public boolean isBookAvailable(String title) {
+        return books.getOrDefault(title, false);
+    }
+}
+```
+
+### Étape 3 : Refactorisation du Code (Refactor)
+
+Après avoir fait passer les tests, nous pouvons améliorer et organiser le code si nécessaire. Dans ce cas, notre code est déjà assez simple et clair, donc peu de refactorisation est nécessaire. Nous allons ajouter quelques commentaires supplémentaires pour la clarté.
+
+### Résolution Complète du Projet
+
+#### Tests Unitaires (Rouge)
+
+```java
+// Fichier: LibraryManagerTest.java
+
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+/**
+ * La classe LibraryManagerTest contient des tests unitaires pour la classe LibraryManager.
+ */
+public class LibraryManagerTest {
+    private LibraryManager libraryManager;
+
+    /**
+     * Initialise un nouveau gestionnaire de bibliothèque avant chaque test.
+     */
+    @BeforeEach
+    public void setUp() {
+        libraryManager = new LibraryManager();
+    }
+
+    /**
+     * Teste l'ajout d'un livre à la bibliothèque.
+     */
+    @Test
+    public void testAddBook() {
+        libraryManager.addBook("1984", "George Orwell");
+        assertTrue(libraryManager.isBookAvailable("1984"), "Le livre doit être disponible après ajout");
+    }
+
+    /**
+     * Teste l'emprunt d'un livre de la bibliothèque.
+     */
+    @Test
+    public void testBorrowBook() {
+        libraryManager.addBook("1984", "George Orwell");
+        libraryManager.borrowBook("1984");
+        assertFalse(libraryManager.isBookAvailable("1984"), "Le livre ne doit plus être disponible après emprunt");
+    }
+
+    /**
+     * Teste le retour d'un livre à la bibliothèque.
+     */
+    @Test
+    public void testReturnBook() {
+        libraryManager.addBook("1984", "George Orwell");
+        libraryManager.borrowBook("1984");
+        libraryManager.returnBook("1984");
+        assertTrue(libraryManager.isBookAvailable("1984"), "Le livre doit être disponible après retour");
+    }
+
+    /**
+     * Teste la vérification de la disponibilité d'un livre.
+     */
+    @Test
+    public void testIsBookAvailable() {
+        libraryManager.addBook("1984", "George Orwell");
+        assertTrue(libraryManager.isBookAvailable("1984"), "Le livre doit être disponible");
+        libraryManager.borrowBook("1984");
+        assertFalse(libraryManager.isBookAvailable("1984"), "Le livre ne doit plus être disponible");
+    }
+}
+```
+
+#### Code de Production (Vert et Refactorisé)
+
+```java
+// Fichier: LibraryManager.java
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * La classe LibraryManager gère une collection de livres, permettant d'ajouter, emprunter et retourner des livres.
+ */
+public class LibraryManager {
+    private Map<String, Boolean> books;
+
+    /**
+     * Initialise un nouveau gestionnaire de bibliothèque.
+     */
+    public LibraryManager() {
+        books = new HashMap<>();
+    }
+
+    /**
+     * Ajoute un livre à la bibliothèque.
+     *
+     * @param title  le titre du livre
+     * @param author l'auteur du livre
+     */
+    public void addBook(String title, String author) {
+        books.put(title, true);
+    }
+
+    /**
+     * Emprunte un livre de la bibliothèque.
+     *
+     * @param title le titre du livre à emprunter
+     * @return true si le livre a été emprunté, false
+
+ sinon
+     */
+    public boolean borrowBook(String title) {
+        if (isBookAvailable(title)) {
+            books.put(title, false);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Retourne un livre à la bibliothèque.
+     *
+     * @param title le titre du livre à retourner
+     */
+    public void returnBook(String title) {
+        if (books.containsKey(title)) {
+            books.put(title, true);
+        }
+    }
+
+    /**
+     * Vérifie si un livre est disponible à l'emprunt.
+     *
+     * @param title le titre du livre
+     * @return true si le livre est disponible, false sinon
+     */
+    public boolean isBookAvailable(String title) {
+        return books.getOrDefault(title, false);
+    }
+}
+```
+
+### Ce qu'il faut retenir
+
+avec la méthodologie TDD, nous avons d'abord écrit les tests pour les fonctionnalités requises, puis nous avons implémenté le code pour faire passer ces tests. Enfin, nous avons refactorisé le code pour améliorer sa lisibilité et sa maintenance. Cette approche garantit que notre code est testé et fonctionne comme prévu, tout en étant propre et bien structuré.
+
+
