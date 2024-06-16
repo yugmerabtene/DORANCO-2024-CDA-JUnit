@@ -1,20 +1,42 @@
 # Module-01 : Configuration et Utilisation de JUnit dans IntelliJ IDEA
 
-## Introduction
+## Durée : 8 heures
 
-JUnit est un framework de tests unitaires pour le langage de programmation Java. Il vous permet de tester des unités de code de manière isolée pour s'assurer de leur bon fonctionnement. Ce module vous guidera à travers l'installation de JUnit dans IntelliJ IDEA, l'écriture et l'exécution de tests unitaires, ainsi que l'utilisation de pratiques avancées comme le mocking avec Mockito et l'analyse de couverture de code avec JaCoCo.
+## Objectifs :
 
-## Configuration de JUnit dans IntelliJ IDEA
+- Comprendre les bases des tests unitaires
+- Introduction à JUnit
+- Écrire des tests unitaires simples
 
-Pour écrire et exécuter des tests unitaires avec JUnit dans IntelliJ IDEA, suivez ces étapes :
+## Contenu :
 
-### Étape 1 : Installer IntelliJ IDEA
+### Introduction aux Tests Unitaires (2 heures)
+
+#### Partie 1 : Importance des tests unitaires (1 heure)
+
+1. **Pourquoi tester ?**
+   - Les tests unitaires permettent de s'assurer que le code fonctionne comme prévu.
+   - Ils aident à identifier les bugs tôt dans le cycle de développement, ce qui réduit le coût et le temps nécessaires pour les corriger.
+   - Les tests unitaires facilitent la maintenance du code en permettant de vérifier que les modifications n'introduisent pas de régressions.
+
+2. **Cycle de développement avec tests (TDD - Test Driven Development)**
+   - Le TDD est une approche de développement logiciel où les tests sont écrits avant le code.
+   - Le cycle TDD typique comprend trois étapes : écrire un test, écrire le code pour faire passer le test, et refactoriser le code.
+
+#### Partie 2 : Principes de base des tests unitaires (1 heure)
+
+1. **Définitions et concepts**
+   - Un test unitaire est un test qui vérifie le fonctionnement d'une petite unité de code (comme une méthode ou une classe).
+   - Les tests unitaires doivent être automatisés et rapides à exécuter.
+   - Ils doivent être indépendants les uns des autres pour éviter les effets de bord.
+
+### Configuration de l'environnement (1 heure)
+
+#### Partie 1 : Installation de JUnit (30 minutes)
 
 1. **Télécharger et installer IntelliJ IDEA**
    - Téléchargez IntelliJ IDEA depuis le [site officiel](https://www.jetbrains.com/idea/download/).
    - Installez IntelliJ IDEA en suivant les instructions spécifiques à votre système d'exploitation.
-
-### Étape 2 : Créer un nouveau projet
 
 2. **Créer un nouveau projet**
    - Ouvrez IntelliJ IDEA.
@@ -23,8 +45,6 @@ Pour écrire et exécuter des tests unitaires avec JUnit dans IntelliJ IDEA, sui
    - Donnez un nom à votre projet et choisissez un emplacement.
    - Cliquez sur `Finish`.
 
-### Étape 3 : Ajouter JUnit à votre projet
-
 3. **Ajouter JUnit à votre projet**
    - Cliquez sur `File` > `Project Structure` ou utilisez le raccourci `Ctrl+Alt+Shift+S`.
    - Dans la section `Libraries`, cliquez sur le signe `+` pour ajouter une nouvelle bibliothèque.
@@ -32,17 +52,46 @@ Pour écrire et exécuter des tests unitaires avec JUnit dans IntelliJ IDEA, sui
    - Dans la boîte de dialogue qui s'affiche, tapez `junit:junit:4.13.2` (ou une version plus récente si disponible).
    - Cliquez sur `OK` et IntelliJ téléchargera et ajoutera JUnit à votre projet.
 
-## Écrire et Exécuter des Tests Unitaires avec JUnit
+#### Partie 2 : Configuration de Maven/Gradle pour JUnit (30 minutes)
 
-Pour illustrer l'importance des tests unitaires, nous allons créer différents exercices correspondant à des avantages spécifiques des tests unitaires.
+##### Maven
 
-### 1. Détection Précoce des Erreurs
+Ajoutez la dépendance suivante à votre fichier `pom.xml` :
 
-**But :** Les tests unitaires permettent de détecter les erreurs dès les premières phases du développement, réduisant ainsi les coûts et le temps nécessaires pour corriger les bugs.
+```xml
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.13.2</version>
+    <scope>test</scope>
+</dependency>
+```
 
-**Exercice associé :** Créer une méthode simple et écrire des tests pour elle, montrant comment les tests peuvent immédiatement identifier les erreurs de logique.
+##### Gradle
 
-#### Exemple :
+Ajoutez la dépendance suivante à votre fichier `build.gradle` :
+
+```groovy
+testImplementation 'junit:junit:4.13.2'
+```
+
+### Explication des Annotations des Tests Unitaires
+
+Les annotations dans JUnit sont utilisées pour définir le comportement des méthodes de test et leur cycle de vie. Voici une explication détaillée des principales annotations utilisées dans JUnit :
+
+1. **`@Test`** : Indique que la méthode est une méthode de test. JUnit exécutera cette méthode comme un test lors de l'exécution des tests.
+
+2. **`@BeforeEach`** : Indique qu'une méthode annotée avec `@BeforeEach` doit être exécutée avant chaque méthode de test. Elle est utilisée pour configurer les prérequis nécessaires pour chaque test.
+
+3. **`@AfterEach`** : Indique qu'une méthode annotée avec `@AfterEach` doit être exécutée après chaque méthode de test. Elle est utilisée pour nettoyer les ressources utilisées pendant les tests.
+
+4. **`@BeforeAll`** : Indique qu'une méthode annotée avec `@BeforeAll` doit être exécutée une seule fois avant toutes les méthodes de test dans la classe. Elle est utilisée pour effectuer des configurations globales. La méthode doit être statique.
+
+5. **`@AfterAll`** : Indique qu'une méthode annotée avec `@AfterAll` doit être exécutée une seule fois après toutes les méthodes de test dans la classe. Elle est utilisée pour effectuer des nettoyages globaux. La méthode doit être statique.
+
+### Écriture de Tests Unitaires Simples (3 heures)
+
+#### Partie 1 : Structure d'un test unitaire (1 heure)
 
 1. **Créer la classe `Calculator` avec une méthode `add` :**
 
@@ -70,18 +119,55 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    ```java
    // Fichier: CalculatorTest.java
    import static org.junit.jupiter.api.Assertions.assertEquals;
+   import org.junit.jupiter.api.BeforeEach;
+   import org.junit.jupiter.api.AfterEach;
+   import org.junit.jupiter.api.BeforeAll;
+   import org.junit.jupiter.api.AfterAll;
    import org.junit.jupiter.api.Test;
 
    /**
     * La classe CalculatorTest contient des tests unitaires pour la classe Calculator.
     */
    public class CalculatorTest {
+       private Calculator calculator;
+
+       /**
+        * Exécuté avant chaque méthode de test. Initialise le calculateur.
+        */
+       @BeforeEach
+       public void setUp() {
+           calculator = new Calculator();
+       }
+
+       /**
+        * Exécuté après chaque méthode de test.
+        */
+       @AfterEach
+       public void tearDown() {
+           calculator = null;
+       }
+
+       /**
+        * Exécuté une fois avant tous les tests. Peut être utilisé pour une configuration globale.
+        */
+       @BeforeAll
+       public static void initAll() {
+           System.out.println("Tests démarrés");
+       }
+
+       /**
+        * Exécuté une fois après tous les tests. Peut être utilisé pour un nettoyage global.
+        */
+       @AfterAll
+       public static void tearDownAll() {
+           System.out.println("Tests terminés");
+       }
+
        /**
         * Teste la méthode add pour vérifier que les valeurs sont correctement additionnées.
         */
        @Test
        public void testAdd() {
-           Calculator calculator = new Calculator();
            assertEquals(5, calculator.add(2, 3), "2 + 3 doit être égal à 5");
            assertEquals(0, calculator.add(0, 0), "0 + 0 doit être égal à 0");
            assertEquals(-5, calculator.add(-2, -3), "-2 + -3 doit être égal à -5");
@@ -89,13 +175,127 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-### 2. Code de Meilleure Qualité
+#### Partie 2 : Assertions de base (1 heure)
 
-**But :** En écrivant des tests, les développeurs sont encouragés à écrire du code plus propre et mieux structuré.
+- **assertEquals** : Vérifie que deux valeurs sont égales.
+- **assertTrue** : Vérifie qu'une condition est vraie.
+- **assertFalse** : Vérifie qu'une condition est fausse.
+- **assertNull** : Vérifie qu'un objet est null.
+- **assertNotNull** : Vérifie qu'un objet n'est pas null.
 
-**Exercice associé :** Créer une classe avec des méthodes simples, puis écrire des tests unitaires pour encourager la bonne structuration et la clarté du code.
+1. **Exemple d'utilisation des assertions :**
 
-#### Exemple :
+   ```java
+   // Fichier: AssertionTests.java
+   import static org.junit.jupiter.api.Assertions.*;
+   import org.junit.jupiter.api.Test;
+
+   public class AssertionTests {
+       @Test
+       public void testAssertions() {
+           // Vérifier l'égalité
+           assertEquals(5, 5, "Les valeurs doivent être égales");
+
+           // Vérifier que la condition est vraie
+           assertTrue(3 > 2, "La condition doit être vraie");
+
+           // Vérifier que la condition est fausse
+           assertFalse(3 < 2, "La condition doit être fausse");
+
+           // Vérifier que l'objet est null
+           Object obj = null;
+           assertNull(obj, "L'objet doit être null");
+
+           // Vérifier que l'objet n'est pas null
+           obj = new Object();
+           assertNotNull(obj, "L'objet ne doit pas être null");
+       }
+   }
+   ```
+
+#### Partie 3 : Tests de méthodes simples et avec exceptions (1 heure)
+
+1. **Ajouter une méthode avec des exceptions dans la classe `Calculator` :**
+
+   ```java
+   // Fichier: Calculator.java
+   public class Calculator {
+       public int add(int a, int b) {
+           return a + b;
+       }
+
+       public int divide(int a, int b) {
+           if (b == 0) {
+               throw new IllegalArgumentException("Division par zéro");
+           }
+           return a / b;
+       }
+   }
+   ```
+
+2. **Créer des tests pour vérifier les exceptions :**
+
+   ```java
+   // Fichier: CalculatorTest.java
+   import static org.junit.jupiter.api.Assertions.assertEquals
+
+;
+   import static org.junit.jupiter.api.Assertions.assertThrows;
+   import org.junit.jupiter.api.BeforeEach;
+   import org.junit.jupiter.api.AfterEach;
+   import org.junit.jupiter.api.BeforeAll;
+   import org.junit.jupiter.api.AfterAll;
+   import org.junit.jupiter.api.Test;
+
+   public class CalculatorTest {
+       private Calculator calculator;
+
+       @BeforeEach
+       public void setUp() {
+           calculator = new Calculator();
+       }
+
+       @AfterEach
+       public void tearDown() {
+           calculator = null;
+       }
+
+       @BeforeAll
+       public static void initAll() {
+           System.out.println("Tests démarrés");
+       }
+
+       @AfterAll
+       public static void tearDownAll() {
+           System.out.println("Tests terminés");
+       }
+
+       @Test
+       public void testAdd() {
+           assertEquals(5, calculator.add(2, 3), "2 + 3 doit être égal à 5");
+           assertEquals(0, calculator.add(0, 0), "0 + 0 doit être égal à 0");
+           assertEquals(-5, calculator.add(-2, -3), "-2 + -3 doit être égal à -5");
+       }
+
+       @Test
+       public void testDivide() {
+           assertEquals(2, calculator.divide(4, 2), "4 / 2 doit être égal à 2");
+       }
+
+       @Test
+       public void testDivideByZero() {
+           assertThrows(IllegalArgumentException.class, () -> {
+               calculator.divide(4, 0);
+           }, "Division par zéro doit lancer une IllegalArgumentException");
+       }
+   }
+   ```
+
+### Pause déjeuner (1 heure)
+
+### Exemples Pratiques (1 heure)
+
+#### Partie 1 : Tests de méthodes simples (30 minutes)
 
 1. **Créer la classe `Person` :**
 
@@ -108,22 +308,11 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
        private String firstName;
        private String lastName;
 
-       /**
-        * Constructeur pour initialiser une personne avec un prénom et un nom de famille.
-        *
-        * @param firstName le prénom
-        * @param lastName le nom de famille
-        */
        public Person(String firstName, String lastName) {
            this.firstName = firstName;
            this.lastName = lastName;
        }
 
-       /**
-        * Retourne le nom complet de la personne.
-        *
-        * @return le prénom et le nom de famille concaténés
-        */
        public String getFullName() {
            return firstName + " " + lastName;
        }
@@ -141,9 +330,6 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
     * La classe PersonTest contient des tests unitaires pour la classe Person.
     */
    public class PersonTest {
-       /**
-        * Teste la méthode getFullName pour vérifier que le nom complet est correct.
-        */
        @Test
        public void testGetFullName() {
            Person person = new Person("John", "Doe");
@@ -155,75 +341,9 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-### 3. Refactorisation Facilitée
+#### Partie 2 : Tests de méthodes avec exceptions (30 minutes)
 
-**But :** Les tests unitaires permettent de refactoriser le code en toute confiance, sachant que les tests vérifieront que les fonctionnalités restent intactes.
-
-**Exercice associé :** Refactoriser une méthode existante pour inclure une nouvelle logique (par exemple, la vérification des valeurs nulles), puis écrire des tests unitaires pour garantir que les changements n'introduisent pas de nouveaux bugs.
-
-#### Exemple :
-
-1. **Refactoriser la méthode `add` de `Calculator` pour inclure une vérification des valeurs nulles :**
-
-   ```java
-   // Fichier: Calculator.java
-   public class Calculator {
-       /**
-        * Additionne deux entiers et retourne le résultat. Lève une exception si un des arguments est null.
-        *
-        * @param a le premier entier (ne doit pas être null)
-        * @param b le second entier (ne doit pas être null)
-        * @return la somme de a et b
-        * @throws IllegalArgumentException si a ou b est null
-        */
-       public int add(Integer a, Integer b) {
-           if (a == null || b == null) {
-               throw new IllegalArgumentException("Les arguments ne doivent pas être nuls");
-           }
-           return a + b;
-       }
-   }
-   ```
-
-2. **Mettre à jour les tests dans `CalculatorTest` pour vérifier la nouvelle logique :**
-
-   ```java
-   // Fichier: CalculatorTest.java
-   import static org.junit.jupiter.api.Assertions.assertEquals;
-   import static org.junit.jupiter.api.Assertions.assertThrows;
-   import org.junit.jupiter.api.Test;
-
-   public class CalculatorTest {
-       @Test
-       public void testAdd() {
-           Calculator calculator = new Calculator();
-           assertEquals(5, calculator.add(2, 3), "2 + 3 doit être égal à 5");
-           assertEquals(0, calculator.add(0, 0), "0 + 0 doit être égal à 0");
-           assertEquals(-5, calculator.add(-2, -3), "-2 + -3 doit être égal à -5");
-       }
-
-       @Test
-       public void testAddWithNull() {
-           Calculator calculator = new Calculator();
-           assertThrows(IllegalArgumentException.class, () -> {
-               calculator.add(null, 2);
-           }, "Les arguments ne doivent pas être nuls");
-           assertThrows(IllegalArgumentException.class, () -> {
-               calculator.add(2, null);
-           }, "Les arguments ne doivent pas être nuls");
-       }
-   }
-   ```
-
-### 4. Documentation Vivante
-
-**But :** Les tests peuvent servir de documentation sur le comportement attendu du code.
-
-**Exercice associé :** Créer des méthodes de classe avec des comportements spécifiques (comme dépôt et retrait d'argent dans un compte bancaire), puis écrire des tests unitaires détaillés pour documenter ces comportements.
-
-#### Exemple :
-
-1. **Créer la classe `BankAccount` :**
+1. **Ajouter des méthodes avec des exceptions dans la classe `BankAccount` :**
 
    ```java
    // Fichier: BankAccount.java
@@ -231,16 +351,8 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
     * La classe BankAccount représente un compte bancaire avec des méthodes pour déposer, retirer et transférer des fonds.
     */
    public class BankAccount {
-       private double
+       private double balance;
 
- balance;
-
-       /**
-        * Constructeur pour initialiser le compte bancaire avec un solde initial.
-        *
-        * @param initialBalance le solde initial
-        * @throws IllegalArgumentException si le solde initial est négatif
-        */
        public BankAccount(double initialBalance) {
            if (initialBalance < 0) {
                throw new IllegalArgumentException("Le solde initial ne peut pas être négatif");
@@ -248,12 +360,6 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
            this.balance = initialBalance;
        }
 
-       /**
-        * Dépose un montant sur le compte bancaire.
-        *
-        * @param amount le montant à déposer
-        * @throws IllegalArgumentException si le montant est négatif ou zéro
-        */
        public void deposit(double amount) {
            if (amount <= 0) {
                throw new IllegalArgumentException("Le montant du dépôt doit être positif");
@@ -261,12 +367,6 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
            balance += amount;
        }
 
-       /**
-        * Retire un montant du compte bancaire.
-        *
-        * @param amount le montant à retirer
-        * @throws IllegalArgumentException si les fonds sont insuffisants
-        */
        public void withdraw(double amount) {
            if (amount > balance) {
                throw new IllegalArgumentException("Fonds insuffisants");
@@ -274,29 +374,18 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
            balance -= amount;
        }
 
-       /**
-        * Transfère un montant d'un compte bancaire à un autre.
-        *
-        * @param toAccount le compte vers lequel transférer les fonds
-        * @param amount le montant à transférer
-        */
        public void transfer(BankAccount toAccount, double amount) {
            this.withdraw(amount);
            toAccount.deposit(amount);
        }
 
-       /**
-        * Retourne le solde actuel du compte bancaire.
-        *
-        * @return le solde actuel
-        */
        public double getBalance() {
            return balance;
        }
    }
    ```
 
-2. **Créer la classe de test `BankAccountTest` :**
+2. **Créer des tests pour vérifier les exceptions :**
 
    ```java
    // Fichier: BankAccountTest.java
@@ -347,108 +436,11 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-### 5. Réduction des Régressions
+### Outils et Pratiques Recommandées (1 heure)
 
-**But :** Les tests unitaires permettent de vérifier que les nouvelles modifications n'ont pas introduit de nouvelles erreurs.
-
-**Exercice associé :** Ajouter de nouvelles fonctionnalités à une classe existante (comme le transfert d'argent entre comptes), puis écrire des tests unitaires pour s'assurer que les nouvelles fonctionnalités fonctionnent correctement et que les anciennes fonctionnalités ne sont pas brisées.
-
-#### Exemple :
-
-1. **Ajouter la méthode `transfer` dans la classe `BankAccount` :**
-
-   ```java
-   // Fichier: BankAccount.java
-   public class BankAccount {
-       private double balance;
-
-       public BankAccount(double initialBalance) {
-           if (initialBalance < 0) {
-               throw new IllegalArgumentException("Le solde initial ne peut pas être négatif");
-           }
-           this.balance = initialBalance;
-       }
-
-       public void deposit(double amount) {
-           if (amount <= 0) {
-               throw new IllegalArgumentException("Le montant du dépôt doit être positif");
-           }
-           balance += amount;
-       }
-
-       public void withdraw(double amount) {
-           if (amount > balance) {
-               throw new IllegalArgumentException("Fonds insuffisants");
-           }
-           balance -= amount;
-       }
-
-       public void transfer(BankAccount toAccount, double amount) {
-           this.withdraw(amount);
-           toAccount.deposit(amount);
-       }
-
-       public double getBalance() {
-           return balance;
-       }
-   }
-   ```
-
-2. **Mettre à jour les tests dans `BankAccountTest` :**
-
-   ```java
-   // Fichier: BankAccountTest.java
-   import static org.junit.jupiter.api.Assertions.assertEquals;
-   import static org.junit.jupiter.api.Assertions.assertThrows;
-   import org.junit.jupiter.api.Test;
-
-   public class BankAccountTest {
-       @Test
-       public void testInitialBalance() {
-           BankAccount account = new BankAccount(100.0);
-           assertEquals(100.0, account.getBalance(), "Le solde initial doit être de 100.0");
-       }
-
-       @Test
-       public void testDeposit() {
-           BankAccount account = new BankAccount(100.0);
-           account.deposit(50.0);
-           assertEquals(150.0, account.getBalance(), "Le solde après dépôt doit être de 150.0");
-       }
-
-       @Test
-       public void testWithdraw() {
-           BankAccount account = new BankAccount(100.0);
-           account.withdraw(50.0);
-           assertEquals(50.0, account.getBalance(), "Le solde après retrait doit être de 50.0");
-       }
-
-       @Test
-       public void testWithdrawInsufficientFunds() {
-           BankAccount account = new BankAccount(100.0);
-           assertThrows(IllegalArgumentException.class, () -> {
-               account.withdraw(150.0);
-           }, "Un retrait de 150.0 devrait déclencher une exception de fonds insuffisants");
-       }
-
-       @Test
-       public void testTransfer() {
-           BankAccount account1 = new BankAccount(100.0);
-           BankAccount account2 = new BankAccount(50.0);
-           account1.transfer(account2, 30.0);
-           assertEquals(70.0, account1.getBalance(), "Le solde après transfert doit être de 70.0 pour le compte 1");
-           assertEquals(80.0, account2.getBalance(), "Le solde après transfert doit être de 80.0 pour le compte 2");
-       }
-   }
-   ```
-
-## Outils et Pratiques Recommandées
-
-### Partie 1 : Utilisation de Mocking avec Mockito
+#### Partie 1 : Utilisation de Mocking avec Mockito (30 minutes)
 
 Mockito est un framework de mock permettant de simuler des objets dans vos tests unitaires, ce qui est très utile pour isoler les unités de code et tester leur comportement de manière plus précise.
-
-#### Configuration de Mockito dans IntelliJ IDEA
 
 1. **Ajouter les dépendances Mockito :**
 
@@ -497,17 +489,13 @@ Mockito est un framework de mock permettant de simuler des objets dans vos tests
    }
    ```
 
-### Partie 2 : Coverage des Tests avec JaCoCo
+#### Partie 2 : Coverage des Tests avec JaCoCo (30 minutes)
 
 JaCoCo est un outil de couverture de code qui vous aide à voir quelles parties de votre code sont couvertes par des tests et lesquelles ne le sont pas.
 
-#### Configuration de JaCoCo dans IntelliJ IDEA
-
 1. **Ajouter les dépendances JaCoCo :**
 
-   Ajoutez JaCoCo à votre fichier `
-
-pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
+   Ajoutez JaCoCo à votre fichier `pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
 
    **Pour Maven :**
 
@@ -551,7 +539,9 @@ pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
    jacocoTestReport {
        reports {
            xml.enabled true
-           html.enabled true
+           html
+
+.enabled true
        }
    }
    ```
@@ -576,77 +566,4 @@ pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
 3. **Visualiser les résultats :**
 
    Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couverture ou le dossier `build/reports/jacoco/test/html/index.html` pour Gradle. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
-
-### Exemples Complétés
-
-#### Test avec Mocking
-
-```java
-// Fichier: UserServiceTest.java
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-public class UserServiceTest {
-    @Test
-    public void testGetUserById() {
-        UserRepository mockRepo = mock(UserRepository.class);
-        UserService userService = new UserService(mockRepo);
-
-        User mockUser = new User("John", "Doe");
-        when(mockRepo.findById(1)).thenReturn(mockUser);
-
-        User result = userService.getUserById(1);
-        assertEquals("John Doe", result.getFullName());
-    }
-}
-```
-
-#### Test avec Coverage JaCoCo
-
-```java
-// Fichier: BankAccountTest.java
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-
-public class BankAccountTest {
-    @Test
-    public void testInitialBalance() {
-        BankAccount account = new BankAccount(100.0);
-        assertEquals(100.0, account.getBalance(), "Le solde initial doit être de 100.0");
-    }
-
-    @Test
-    public void testDeposit() {
-        BankAccount account = new BankAccount(100.0);
-        account.deposit(50.0);
-        assertEquals(150.0, account.getBalance(), "Le solde après dépôt doit être de 150.0");
-    }
-
-    @Test
-    public void testWithdraw() {
-        BankAccount account = new BankAccount(100.0);
-        account.withdraw(50.0);
-        assertEquals(50.0, account.getBalance(), "Le solde après retrait doit être de 50.0");
-    }
-
-    @Test
-    public void testWithdrawInsufficientFunds() {
-        BankAccount account = new BankAccount(100.0);
-        assertThrows(IllegalArgumentException.class, () -> {
-            account.withdraw(150.0);
-        }, "Un retrait de 150.0 devrait déclencher une exception de fonds insuffisants");
-    }
-
-    @Test
-    public void testTransfer() {
-        BankAccount account1 = new BankAccount(100.0);
-        BankAccount account2 = new BankAccount(50.0);
-        account1.transfer(account2, 30.0);
-        assertEquals(70.0, account1.getBalance(), "Le solde après transfert doit être de 70.0 pour le compte 1");
-        assertEquals(80.0, account2.getBalance(), "Le solde après transfert doit être de 80.0 pour le compte 2");
-    }
-}
-```
 
