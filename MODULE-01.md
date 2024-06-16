@@ -19,9 +19,7 @@
    - Ils aident à identifier les bugs tôt dans le cycle de développement, ce qui réduit le coût et le temps nécessaires pour les corriger.
    - Les tests unitaires facilitent la maintenance du code en permettant de vérifier que les modifications n'introduisent pas de régressions.
 
-2. **Cycle de développement avec tests (TDD - Test Driven Development)**
-   - Le TDD est une approche de développement logiciel où les tests sont écrits avant le code.
-   - Le cycle TDD typique comprend trois étapes : écrire un test, écrire le code pour faire passer le test, et refactoriser le code.
+
 
 #### Partie 2 : Principes de base des tests unitaires (1 heure)
 
@@ -289,8 +287,8 @@ Les annotations dans JUnit sont utilisées pour définir le comportement des mé
            }, "Division par zéro doit lancer une IllegalArgumentException");
        }
    }
-   ```
-
+```
+```
 ### Pause déjeuner (1 heure)
 
 ### Exemples Pratiques (1 heure)
@@ -566,4 +564,158 @@ JaCoCo est un outil de couverture de code qui vous aide à voir quelles parties 
 3. **Visualiser les résultats :**
 
    Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couverture ou le dossier `build/reports/jacoco/test/html/index.html` pour Gradle. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
+
+
+----
+
+![image](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/98552ac1-3e97-4088-b9c2-f715c6624541)
+
+
+### 2. **Cycle de Développement avec Tests (TDD - Test Driven Development)**
+
+#### Qu'est-ce que le TDD ?
+
+Le **Test Driven Development (TDD)**, ou développement dirigé par les tests, est une approche de développement logiciel qui se concentre sur l'écriture de tests avant même de commencer à coder la fonctionnalité réelle. Cette méthode a été popularisée par Kent Beck, l'un des pionniers de l'Extreme Programming (XP). L'objectif principal du TDD est de garantir que le code écrit est toujours testé et que les nouvelles fonctionnalités sont intégrées sans introduire de bugs.
+
+#### Pourquoi utiliser le TDD ?
+
+- **Qualité du Code** : En écrivant les tests en premier, les développeurs sont contraints de penser à la manière dont le code sera utilisé. Cela conduit à un code plus propre et mieux structuré.
+- **Réduction des Bugs** : Les tests écrits avant le code aident à identifier et corriger les bugs dès les premières phases du développement.
+- **Confiance dans les Refactorisations** : Avec des tests en place, les développeurs peuvent refactoriser le code en toute confiance, sachant que les tests vérifieront que les modifications n'ont pas introduit de nouveaux bugs.
+- **Documentation Vivante** : Les tests servent de documentation vivante sur le comportement attendu du code.
+
+![image](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/86673b93-63f1-4941-ac61-c45594d7509e)
+
+
+#### Le Cycle TDD Typique
+
+Le cycle TDD typique est divisé en trois étapes principales, souvent appelées le cycle "rouge-vert-refactor". Voici une explication détaillée de chaque étape :
+
+1. **Écrire un Test (Rouge)**
+   - **Description** : La première étape consiste à écrire un test qui décrit une nouvelle fonctionnalité ou une amélioration du système. Ce test doit échouer puisqu'aucun code n'a encore été écrit pour implémenter cette fonctionnalité.
+   - **Objectif** : Identifier ce qui doit être implémenté. Cela force le développeur à comprendre et à formaliser les exigences avant de commencer à coder.
+   - **Exemple** : Supposons que vous développiez une calculatrice et que vous souhaitiez ajouter une fonctionnalité d'addition. Vous commenceriez par écrire un test qui vérifie que la méthode `add` retourne la somme de deux nombres.
+
+     ```java
+     // Fichier: CalculatorTest.java
+     import static org.junit.jupiter.api.Assertions.assertEquals;
+     import org.junit.jupiter.api.Test;
+
+     public class CalculatorTest {
+         @Test
+         public void testAdd() {
+             Calculator calculator = new Calculator();
+             assertEquals(5, calculator.add(2, 3), "2 + 3 doit être égal à 5");
+         }
+     }
+     ```
+
+2. **Écrire le Code pour Faire Passer le Test (Vert)**
+   - **Description** : Une fois le test écrit et exécuté (et constatant son échec), l'étape suivante consiste à écrire le code minimal nécessaire pour faire passer le test. L'objectif ici n'est pas d'écrire le code parfait, mais simplement de faire en sorte que le test passe.
+   - **Objectif** : Implémenter la fonctionnalité de manière à ce que le test soit réussi.
+   - **Exemple** : Après avoir écrit le test ci-dessus, vous implémenteriez la méthode `add` dans la classe `Calculator` pour qu'elle retourne la somme de deux nombres.
+
+     ```java
+     // Fichier: Calculator.java
+     public class Calculator {
+         public int add(int a, int b) {
+             return a + b;
+         }
+     }
+     ```
+
+3. **Refactoriser le Code (Refactor)**
+   - **Description** : Après avoir fait passer le test, l'étape suivante consiste à nettoyer et améliorer le code tout en s'assurant que tous les tests passent toujours. La refactorisation peut impliquer la simplification du code, l'amélioration de la lisibilité, ou la suppression de redondances.
+   - **Objectif** : Améliorer la qualité du code sans modifier son comportement externe. Les tests existants garantissent que les modifications n'ont pas introduit de régressions.
+   - **Exemple** : Dans cet exemple simple, il n'y aurait peut-être pas grand-chose à refactoriser. Mais dans des cas plus complexes, vous pourriez organiser votre code en méthodes plus petites, renommer des variables pour une meilleure clarté, ou éliminer du code dupliqué.
+
+---
+
+### Exemple Complet du Cycle TDD
+
+Pour mieux illustrer le cycle TDD, reprenons l'exemple de la calculatrice avec une méthode `subtract` (soustraction).
+
+1. **Écrire un Test (Rouge)**
+
+   ```java
+   // Fichier: CalculatorTest.java
+   import static org.junit.jupiter.api.Assertions.assertEquals;
+   import org.junit.jupiter.api.Test;
+
+   public class CalculatorTest {
+       @Test
+       public void testAdd() {
+           Calculator calculator = new Calculator();
+           assertEquals(5, calculator.add(2, 3), "2 + 3 doit être égal à 5");
+       }
+
+       @Test
+       public void testSubtract() {
+           Calculator calculator = new Calculator();
+           assertEquals(1, calculator.subtract(3, 2), "3 - 2 doit être égal à 1");
+       }
+   }
+   ```
+
+2. **Écrire le Code pour Faire Passer le Test (Vert)**
+
+   ```java
+   // Fichier: Calculator.java
+   public class Calculator {
+       public int add(int a, int b) {
+           return a + b;
+       }
+
+       public int subtract(int a, int b) {
+           return a - b;
+       }
+   }
+   ```
+
+3. **Refactoriser le Code (Refactor)**
+
+   - Après avoir implémenté les méthodes `add` et `subtract`, supposons que vous vous rendiez compte que vous pouvez améliorer la lisibilité en ajoutant des commentaires ou en renommeant des variables pour plus de clarté.
+   - **Avant la refactorisation :**
+
+     ```java
+     public class Calculator {
+         public int add(int a, int b) {
+             return a + b;
+         }
+
+         public int subtract(int a, int b) {
+             return a - b;
+         }
+     }
+     ```
+
+   - **Après la refactorisation :**
+
+     ```java
+     public class Calculator {
+         /**
+          * Additionne deux entiers et retourne le résultat.
+          *
+          * @param a le premier entier
+          * @param b le second entier
+          * @return la somme de a et b
+          */
+         public int add(int a, int b) {
+             return a + b;
+         }
+
+         /**
+          * Soustrait le second entier du premier et retourne le résultat.
+          *
+          * @param a le premier entier
+          * @param b le second entier
+          * @return la différence entre a et b
+          */
+         public int subtract(int a, int b) {
+             return a - b;
+         }
+     }
+     ```
+
+
 
