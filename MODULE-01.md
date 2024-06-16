@@ -1,4 +1,8 @@
+Bien sûr, commençons par la configuration de JUnit dans IntelliJ IDEA avant de passer aux exercices et explications détaillées.
+
 ### Configuration de JUnit dans IntelliJ IDEA
+
+Pour écrire et exécuter des tests unitaires avec JUnit dans IntelliJ IDEA, suivez ces étapes :
 
 #### Étape 1: Installer IntelliJ IDEA
 
@@ -24,178 +28,9 @@
    - Dans la boîte de dialogue qui s'affiche, tapez `junit:junit:4.13.2` (ou une version plus récente si disponible).
    - Cliquez sur `OK` et IntelliJ téléchargera et ajoutera JUnit à votre projet.
 
-### Écriture de Tests Unitaires Simples
+### Écrire et exécuter des tests unitaires avec JUnit
 
-#### Partie 1: Structure d'un test unitaire
-
-##### Méthodes de test
-
-Les méthodes de test sont les blocs de construction de vos tests unitaires. Elles contiennent le code qui vérifie si une unité de code (par exemple, une méthode) fonctionne comme prévu. En JUnit, une méthode de test est simplement une méthode Java marquée avec l'annotation `@Test`.
-
-##### Annotations
-
-Les annotations jouent un rôle crucial dans la configuration et l'exécution des tests unitaires. Voici les principales annotations utilisées en JUnit :
-
-- **`@Test`**: Indique que la méthode annotée est une méthode de test.
-- **`@BeforeEach`**: Indique qu'une méthode doit être exécutée avant chaque méthode de test.
-- **`@AfterEach`**: Indique qu'une méthode doit être exécutée après chaque méthode de test.
-- **`@BeforeAll`**: Indique qu'une méthode statique doit être exécutée une seule fois avant l'exécution de toutes les méthodes de test de la classe.
-- **`@AfterAll`**: Indique qu'une méthode statique doit être exécutée une seule fois après l'exécution de toutes les méthodes de test de la classe.
-
-##### Exemple
-
-1. **Structure d'un test unitaire avec annotations:**
-
-   ```java
-   import org.junit.jupiter.api.*;
-
-   public class ExampleTest {
-       
-       @BeforeAll
-       public static void setupClass() {
-           // Exécuté une fois avant tous les tests
-           System.out.println("Avant tous les tests");
-       }
-
-       @BeforeEach
-       public void setup() {
-           // Exécuté avant chaque test
-           System.out.println("Avant chaque test");
-       }
-
-       @Test
-       public void testExample() {
-           // Exécution du test
-           Assertions.assertTrue(true, "Ce test réussira toujours");
-       }
-
-       @AfterEach
-       public void tearDown() {
-           // Exécuté après chaque test
-           System.out.println("Après chaque test");
-       }
-
-       @AfterAll
-       public static void tearDownClass() {
-           // Exécuté une fois après tous les tests
-           System.out.println("Après tous les tests");
-       }
-   }
-   ```
-
-#### Partie 2: Assertions de base
-
-Les assertions sont utilisées pour vérifier que les résultats attendus et réels d'un test sont les mêmes. JUnit fournit plusieurs méthodes d'assertion pour faciliter cette vérification.
-
-##### Principales méthodes d'assertion
-
-- **`assertEquals(expected, actual)`**: Vérifie que les deux valeurs sont égales.
-- **`assertTrue(condition)`**: Vérifie que la condition est vraie.
-- **`assertFalse(condition)`**: Vérifie que la condition est fausse.
-- **`assertNull(object)`**: Vérifie que l'objet est null.
-- **`assertNotNull(object)`**: Vérifie que l'objet n'est pas null.
-- **`assertThrows(expectedType, executable)`**: Vérifie qu'une exception de type attendu est lancée.
-
-##### Exemple
-
-1. **Exemple d'utilisation des assertions de base:**
-
-   ```java
-   import org.junit.jupiter.api.Test;
-   import static org.junit.jupiter.api.Assertions.*;
-
-   public class AssertionsTest {
-       
-       @Test
-       public void testAssertions() {
-           assertEquals(4, 2 + 2, "2 + 2 doit être égal à 4");
-           assertTrue(3 > 2, "3 est supérieur à 2");
-           assertFalse(3 < 2, "3 n'est pas inférieur à 2");
-           assertNull(null, "Cet objet doit être null");
-           assertNotNull(new Object(), "Cet objet ne doit pas être null");
-       }
-
-       @Test
-       public void testException() {
-           assertThrows(ArithmeticException.class, () -> {
-               int result = 1 / 0;
-           }, "Diviser par zéro doit lancer ArithmeticException");
-       }
-   }
-   ```
-
-#### Partie 3: Tests de méthodes simples et avec exceptions
-
-Dans cette section, nous allons écrire des tests unitaires pour des méthodes simples ainsi que des méthodes qui lancent des exceptions.
-
-##### Exemple
-
-1. **Test de méthodes simples:**
-
-   ```java
-   public class SimpleMath {
-       public int add(int a, int b) {
-           return a + b;
-       }
-
-       public int subtract(int a, int b) {
-           return a - b;
-       }
-   }
-
-   // Fichier: SimpleMathTest.java
-   import org.junit.jupiter.api.Test;
-   import static org.junit.jupiter.api.Assertions.*;
-
-   public class SimpleMathTest {
-
-       @Test
-       public void testAdd() {
-           SimpleMath math = new SimpleMath();
-           assertEquals(5, math.add(2, 3), "2 + 3 doit être égal à 5");
-       }
-
-       @Test
-       public void testSubtract() {
-           SimpleMath math = new SimpleMath();
-           assertEquals(1, math.subtract(3, 2), "3 - 2 doit être égal à 1");
-       }
-   }
-   ```
-
-2. **Test de méthodes avec exceptions:**
-
-   ```java
-   public class Calculator {
-       public int divide(int a, int b) {
-           if (b == 0) {
-               throw new ArithmeticException("Division par zéro");
-           }
-           return a / b;
-       }
-   }
-
-   // Fichier: CalculatorTest.java
-   import org.junit.jupiter.api.Test;
-   import static org.junit.jupiter.api.Assertions.*;
-
-   public class CalculatorTest {
-
-       @Test
-       public void testDivide() {
-           Calculator calculator = new Calculator();
-           assertEquals(2, calculator.divide(4, 2), "4 / 2 doit être égal à 2");
-       }
-
-       @Test
-       public void testDivideByZero() {
-           Calculator calculator = new Calculator();
-           assertThrows(ArithmeticException.class, () -> {
-               calculator.divide(4, 0);
-           }, "Diviser par zéro doit lancer ArithmeticException");
-       }
-   }
-   ```
+Pour illustrer l'importance des tests unitaires, nous allons créer différents exercices correspondant à des avantages spécifiques des tests unitaires.
 
 ### 1. Détection précoce des erreurs
 
@@ -255,8 +90,6 @@ Dans cette section, nous allons écrire des tests unitaires pour des méthodes s
 **But :** En écrivant des tests, les développeurs sont encouragés à écrire du code plus propre et mieux structuré.
 
 **Exercice associé :** Créer une classe avec des méthodes simples, puis écrire des tests unitaires pour encourager la bonne structuration et la clarté du code.
-
-
 
 #### Exemple
 
@@ -413,7 +246,9 @@ Dans cette section, nous allons écrire des tests unitaires pour des méthodes s
         * Dépose un montant sur le compte bancaire.
         *
         * @param amount le montant à déposer
-        * @throws IllegalArgumentException si le montant est négatif ou zéro
+        * @throws IllegalArgumentException si le montant est négatif ou
+
+ zéro
         */
        public void deposit(double amount) {
            if (amount <= 0) {
@@ -527,9 +362,7 @@ Dans cette section, nous allons écrire des tests unitaires pour des méthodes s
            if (initialBalance < 0) {
                throw new IllegalArgumentException("Le solde initial ne peut pas être négatif");
            }
-          
-
- this.balance = initialBalance;
+           this.balance = initialBalance;
        }
 
        public void deposit(double amount) {
@@ -604,3 +437,217 @@ Dans cette section, nous allons écrire des tests unitaires pour des méthodes s
        }
    }
    ```
+
+   Parfait, ajoutons ces sections pour compléter le guide sur les tests unitaires avec JUnit. Voici les ajouts :
+
+---
+
+## Outils et Pratiques Recommandées
+
+### Partie 1 : Utilisation de Mocking avec Mockito
+
+Mockito est un framework de mock permettant de simuler des objets dans vos tests unitaires, ce qui est très utile pour isoler les unités de code et tester leur comportement de manière plus précise.
+
+#### Configuration de Mockito dans IntelliJ IDEA
+
+1. **Ajouter les dépendances Mockito :**
+
+   Ajoutez les dépendances Mockito à votre fichier `pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
+
+   **Pour Maven :**
+
+   ```xml
+   <dependency>
+       <groupId>org.mockito</groupId>
+       <artifactId>mockito-core</artifactId>
+       <version>4.8.0</version>
+       <scope>test</scope>
+   </dependency>
+   ```
+
+   **Pour Gradle :**
+
+   ```groovy
+   testImplementation 'org.mockito:mockito-core:4.8.0'
+   ```
+
+2. **Écrire un test utilisant Mockito :**
+
+   Supposons que vous ayez une classe `UserService` qui dépend d'un `UserRepository`. Vous pouvez utiliser Mockito pour mocker `UserRepository` dans vos tests.
+
+   ```java
+   // Fichier: UserServiceTest.java
+   import static org.mockito.Mockito.*;
+   import static org.junit.jupiter.api.Assertions.*;
+   import org.junit.jupiter.api.Test;
+   import org.mockito.Mockito;
+
+   public class UserServiceTest {
+       @Test
+       public void testGetUserById() {
+           UserRepository mockRepo = mock(UserRepository.class);
+           UserService userService = new UserService(mockRepo);
+
+           User mockUser = new User("John", "Doe");
+           when(mockRepo.findById(1)).thenReturn(mockUser);
+
+           User result = userService.getUserById(1);
+           assertEquals("John Doe", result.getFullName());
+       }
+   }
+   ```
+
+### Partie 2 : Coverage des Tests avec JaCoCo
+
+JaCoCo est un outil de couverture de code qui vous aide à voir quelles parties de votre code sont couvertes par des tests et lesquelles ne le sont pas.
+
+#### Configuration de JaCoCo dans IntelliJ IDEA
+
+1. **Ajouter les dépendances JaCoCo :**
+
+   Ajoutez JaCoCo à votre fichier `pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
+
+   **Pour Maven :**
+
+   ```xml
+   <plugin>
+       <groupId>org.jacoco</groupId>
+       <artifactId>jacoco-maven-plugin</artifactId>
+       <version>0.8.8</version>
+       <executions>
+           <execution>
+               <goals>
+                   <goal>prepare-agent</goal>
+               </goals>
+           </execution>
+           <execution>
+               <id>report</id>
+               <phase>test</phase>
+               <goals>
+                   <goal>report</goal>
+               </goals>
+           </execution>
+       </executions>
+   </plugin>
+   ```
+
+   **Pour Gradle :**
+
+   ```groovy
+   plugins {
+       id 'jacoco'
+   }
+
+   jacoco {
+       toolVersion = '0.8.8'
+   }
+
+   test {
+       finalizedBy jacocoTestReport
+   }
+
+   jacocoTestReport {
+       reports {
+           xml.enabled true
+           html.enabled true
+       }
+   }
+   ```
+
+2. **Analyser la couverture des tests :**
+
+   Exécutez vos tests et générez le rapport de couverture.
+
+   **Avec Maven :**
+
+   ```bash
+   mvn clean test
+   mvn jacoco:report
+   ```
+
+   **Avec Gradle :**
+
+   ```bash
+   ./gradlew test jacocoTestReport
+   ```
+
+3. **Visualiser les résultats :**
+
+   Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couverture ou le dossier `build/reports/jacoco/test/html/index.html` pour Gradle. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
+
+### Exemples Complétés
+
+#### Test avec Mocking
+
+```java
+// Fichier: UserServiceTest.java
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+public class UserServiceTest {
+    @Test
+    public void testGetUserById() {
+        UserRepository mockRepo = mock(UserRepository.class);
+        UserService userService = new UserService(mockRepo);
+
+        User mockUser = new User("John", "Doe");
+        when(mockRepo.findById(1)).thenReturn(mockUser);
+
+        User result = userService.getUserById(1);
+        assertEquals("John Doe", result.getFullName());
+    }
+}
+```
+
+#### Test avec Coverage JaCoCo
+
+```java
+// Fichier: BankAccountTest.java
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class BankAccountTest {
+    @Test
+    public void testInitialBalance() {
+        BankAccount account = new BankAccount(100.0);
+        assertEquals(100.0, account.getBalance(), "Le solde initial doit être de 100.0");
+    }
+
+    @Test
+    public void testDeposit() {
+        BankAccount account = new BankAccount(100.0);
+        account.deposit(50.0);
+        assertEquals(150.0, account.getBalance(), "Le solde après dépôt doit être de 150.0");
+    }
+
+    @Test
+    public void testWithdraw() {
+        BankAccount account = new BankAccount(100.0);
+        account.withdraw(50.0);
+        assertEquals(50.0, account.getBalance(), "Le solde après retrait doit être de 50.0");
+    }
+
+    @Test
+    public void testWithdrawInsufficientFunds() {
+        BankAccount account = new BankAccount(100.0);
+        assertThrows(IllegalArgumentException.class, () -> {
+            account.withdraw(150.0);
+        }, "Un retrait de 150.0 devrait déclencher une exception de fonds insuffisants");
+    }
+
+    @Test
+    public void testTransfer() {
+        BankAccount account1 = new BankAccount(100.0);
+        BankAccount account2 = new BankAccount(50.0);
+        account1.transfer(account2, 30.0);
+        assertEquals(70.0, account1.getBalance(), "Le solde après transfert doit être de 70.0 pour le compte 1");
+        assertEquals(80.0, account2.getBalance(), "Le solde après transfert doit être de 80.0 pour le compte 2");
+    }
+}
+```
+
+
+
+
