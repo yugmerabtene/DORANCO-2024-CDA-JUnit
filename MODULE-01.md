@@ -1,46 +1,54 @@
-Bien sûr, commençons par la configuration de JUnit dans IntelliJ IDEA avant de passer aux exercices et explications détaillées.
+Bien sûr, je vais structurer et détailler davantage le module "JUnit dans IntelliJ IDEA" avec des explications claires et numérotées pour faciliter la compréhension. Voici la version améliorée et bien structurée du module :
 
-### Configuration de JUnit dans IntelliJ IDEA
+---
+
+# Module-01 : Configuration et Utilisation de JUnit dans IntelliJ IDEA
+
+## Introduction
+
+JUnit est un framework de tests unitaires pour le langage de programmation Java. Il vous permet de tester des unités de code de manière isolée pour s'assurer de leur bon fonctionnement. Ce module vous guidera à travers l'installation de JUnit dans IntelliJ IDEA, l'écriture et l'exécution de tests unitaires, ainsi que l'utilisation de pratiques avancées comme le mocking avec Mockito et l'analyse de couverture de code avec JaCoCo.
+
+## Configuration de JUnit dans IntelliJ IDEA
 
 Pour écrire et exécuter des tests unitaires avec JUnit dans IntelliJ IDEA, suivez ces étapes :
 
-#### Étape 1: Installer IntelliJ IDEA
+### Étape 1 : Installer IntelliJ IDEA
 
-1. **Télécharger et installer IntelliJ IDEA:**
+1. **Télécharger et installer IntelliJ IDEA**
    - Téléchargez IntelliJ IDEA depuis le [site officiel](https://www.jetbrains.com/idea/download/).
    - Installez IntelliJ IDEA en suivant les instructions spécifiques à votre système d'exploitation.
 
-#### Étape 2: Créer un nouveau projet
+### Étape 2 : Créer un nouveau projet
 
-1. **Créer un nouveau projet:**
+2. **Créer un nouveau projet**
    - Ouvrez IntelliJ IDEA.
    - Cliquez sur `File` > `New` > `Project`.
    - Sélectionnez `Java` dans la liste des types de projet.
    - Donnez un nom à votre projet et choisissez un emplacement.
    - Cliquez sur `Finish`.
 
-#### Étape 3: Ajouter JUnit à votre projet
+### Étape 3 : Ajouter JUnit à votre projet
 
-1. **Ajouter JUnit à votre projet:**
+3. **Ajouter JUnit à votre projet**
    - Cliquez sur `File` > `Project Structure` ou utilisez le raccourci `Ctrl+Alt+Shift+S`.
    - Dans la section `Libraries`, cliquez sur le signe `+` pour ajouter une nouvelle bibliothèque.
    - Sélectionnez `From Maven...`.
    - Dans la boîte de dialogue qui s'affiche, tapez `junit:junit:4.13.2` (ou une version plus récente si disponible).
    - Cliquez sur `OK` et IntelliJ téléchargera et ajoutera JUnit à votre projet.
 
-### Écrire et exécuter des tests unitaires avec JUnit
+## Écrire et Exécuter des Tests Unitaires avec JUnit
 
 Pour illustrer l'importance des tests unitaires, nous allons créer différents exercices correspondant à des avantages spécifiques des tests unitaires.
 
-### 1. Détection précoce des erreurs
+### 1. Détection Précoce des Erreurs
 
 **But :** Les tests unitaires permettent de détecter les erreurs dès les premières phases du développement, réduisant ainsi les coûts et le temps nécessaires pour corriger les bugs.
 
 **Exercice associé :** Créer une méthode simple et écrire des tests pour elle, montrant comment les tests peuvent immédiatement identifier les erreurs de logique.
 
-#### Exemple
+#### Exemple :
 
-1. **Créer la classe `Calculator` avec une méthode `add`:**
+1. **Créer la classe `Calculator` avec une méthode `add` :**
 
    ```java
    // Fichier: Calculator.java
@@ -61,7 +69,7 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-2. **Créer la classe de test `CalculatorTest`:**
+2. **Créer la classe de test `CalculatorTest` :**
 
    ```java
    // Fichier: CalculatorTest.java
@@ -85,15 +93,15 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-### 2. Code de meilleure qualité
+### 2. Code de Meilleure Qualité
 
 **But :** En écrivant des tests, les développeurs sont encouragés à écrire du code plus propre et mieux structuré.
 
 **Exercice associé :** Créer une classe avec des méthodes simples, puis écrire des tests unitaires pour encourager la bonne structuration et la clarté du code.
 
-#### Exemple
+#### Exemple :
 
-1. **Créer la classe `Person`:**
+1. **Créer la classe `Person` :**
 
    ```java
    // Fichier: Person.java
@@ -126,7 +134,7 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-2. **Créer la classe de test `PersonTest`:**
+2. **Créer la classe de test `PersonTest` :**
 
    ```java
    // Fichier: PersonTest.java
@@ -151,13 +159,13 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-### 3. Refactorisation facilitée
+### 3. Refactorisation Facilitée
 
 **But :** Les tests unitaires permettent de refactoriser le code en toute confiance, sachant que les tests vérifieront que les fonctionnalités restent intactes.
 
 **Exercice associé :** Refactoriser une méthode existante pour inclure une nouvelle logique (par exemple, la vérification des valeurs nulles), puis écrire des tests unitaires pour garantir que les changements n'introduisent pas de nouveaux bugs.
 
-#### Exemple
+#### Exemple :
 
 1. **Refactoriser la méthode `add` de `Calculator` pour inclure une vérification des valeurs nulles :**
 
@@ -211,15 +219,15 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-### 4. Documentation vivante
+### 4. Documentation Vivante
 
 **But :** Les tests peuvent servir de documentation sur le comportement attendu du code.
 
 **Exercice associé :** Créer des méthodes de classe avec des comportements spécifiques (comme dépôt et retrait d'argent dans un compte bancaire), puis écrire des tests unitaires détaillés pour documenter ces comportements.
 
-#### Exemple
+#### Exemple :
 
-1. **Créer la classe `BankAccount`:**
+1. **Créer la classe `BankAccount` :**
 
    ```java
    // Fichier: BankAccount.java
@@ -227,7 +235,9 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
     * La classe BankAccount représente un compte bancaire avec des méthodes pour déposer, retirer et transférer des fonds.
     */
    public class BankAccount {
-       private double balance;
+       private double
+
+ balance;
 
        /**
         * Constructeur pour initialiser le compte bancaire avec un solde initial.
@@ -246,9 +256,7 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
         * Dépose un montant sur le compte bancaire.
         *
         * @param amount le montant à déposer
-        * @throws IllegalArgumentException si le montant est négatif ou
-
- zéro
+        * @throws IllegalArgumentException si le montant est négatif ou zéro
         */
        public void deposit(double amount) {
            if (amount <= 0) {
@@ -292,7 +300,7 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-2. **Créer la classe de test `BankAccountTest`:**
+2. **Créer la classe de test `BankAccountTest` :**
 
    ```java
    // Fichier: BankAccountTest.java
@@ -343,15 +351,15 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-### 5. Réduction des régressions
+### 5. Réduction des Régressions
 
 **But :** Les tests unitaires permettent de vérifier que les nouvelles modifications n'ont pas introduit de nouvelles erreurs.
 
 **Exercice associé :** Ajouter de nouvelles fonctionnalités à une classe existante (comme le transfert d'argent entre comptes), puis écrire des tests unitaires pour s'assurer que les nouvelles fonctionnalités fonctionnent correctement et que les anciennes fonctionnalités ne sont pas brisées.
 
-#### Exemple
+#### Exemple :
 
-1. **Ajouter la méthode `transfer` dans la classe `BankAccount`:**
+1. **Ajouter la méthode `transfer` dans la classe `BankAccount` :**
 
    ```java
    // Fichier: BankAccount.java
@@ -390,7 +398,7 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
    }
    ```
 
-2. **Mettre à jour les tests dans `BankAccountTest`:**
+2. **Mettre à jour les tests dans `BankAccountTest` :**
 
    ```java
    // Fichier: BankAccountTest.java
@@ -437,10 +445,6 @@ Pour illustrer l'importance des tests unitaires, nous allons créer différents 
        }
    }
    ```
-
-   Parfait, ajoutons ces sections pour compléter le guide sur les tests unitaires avec JUnit. Voici les ajouts :
-
----
 
 ## Outils et Pratiques Recommandées
 
@@ -505,7 +509,9 @@ JaCoCo est un outil de couverture de code qui vous aide à voir quelles parties 
 
 1. **Ajouter les dépendances JaCoCo :**
 
-   Ajoutez JaCoCo à votre fichier `pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
+   Ajoutez JaCoCo à votre fichier `
+
+pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
 
    **Pour Maven :**
 
@@ -647,7 +653,4 @@ public class BankAccountTest {
     }
 }
 ```
-
-
-
 
