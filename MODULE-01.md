@@ -1,7 +1,3 @@
-Bien sûr, je vais structurer et détailler davantage le module "JUnit dans IntelliJ IDEA" avec des explications claires et numérotées pour faciliter la compréhension. Voici la version améliorée et bien structurée du module :
-
----
-
 # Module-01 : Configuration et Utilisation de JUnit dans IntelliJ IDEA
 
 ## Introduction
