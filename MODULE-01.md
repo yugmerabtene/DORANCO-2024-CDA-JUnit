@@ -720,88 +720,149 @@ Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couver
 
 Si cela ne marche toujours pas installer la varibale d'environnement : 
 
+## Configuration sur Windows
 
-Pour installer Maven et configurer la variable d'environnement sur votre système, suivez les étapes ci-dessous selon votre système d'exploitation (Windows, macOS ou Linux).
+### Configuration de `JAVA_HOME`
 
-### Sous Windows
+1. **Télécharger et installer le JDK:**
+   - Téléchargez le JDK depuis le site officiel d'Oracle : [Java SE Downloads](https://www.oracle.com/java/technologies/javase-downloads.html).
+   - Installez le JDK. Notez le chemin d'installation, par exemple `C:\Program Files\Java\jdk-17`.
 
-#### Étape 1 : Télécharger Maven
+2. **Configurer `JAVA_HOME`:**
+   - Ouvrez le Panneau de configuration.
+   - Allez dans **Système et sécurité** > **Système**.
+   - Cliquez sur **Paramètres système avancés**.
+   - Dans la fenêtre Propriétés système, cliquez sur **Variables d'environnement**.
+   - Cliquez sur **Nouvelle...** sous les variables système.
+   - Ajoutez une nouvelle variable appelée `JAVA_HOME` et réglez-la sur le chemin d'installation du JDK, par exemple `C:\Program Files\Java\jdk-17`.
+   - Cliquez sur **OK** pour fermer les fenêtres.
 
-1. Accédez à la [page de téléchargement de Maven](https://maven.apache.org/download.cgi).
-2. Téléchargez la version binaire ZIP de Maven (par exemple, `apache-maven-3.8.4-bin.zip`).
+3. **Modifier la variable `Path`:**
+   - Dans les variables système, trouvez et sélectionnez la variable `Path`, puis cliquez sur **Modifier...**.
+   - Ajoutez `%JAVA_HOME%\bin` à la liste des chemins.
+   - Cliquez sur **OK** pour fermer les fenêtres.
 
-#### Étape 2 : Extraire l'Archive
+4. **Vérifier la configuration:**
+   - Ouvrez une nouvelle fenêtre de commande (cmd) et tapez :
+     ```bash
+     echo %JAVA_HOME%
+     ```
+   - Cela devrait afficher le chemin vers le répertoire JDK.
+   - Ensuite, tapez :
+     ```bash
+     java -version
+     ```
+   - Vous devriez voir la version de Java installée.
 
-1. Extrayez l'archive téléchargée dans un répertoire, par exemple `C:\apache-maven-3.8.4`.
+### Configuration de `MAVEN_HOME`
 
-#### Étape 3 : Configurer les Variables d'Environnement
+1. **Télécharger Maven:**
+   - Allez sur le site officiel de Maven : [Apache Maven Download](https://maven.apache.org/download.cgi).
+   - Téléchargez la version binaire (zip) de Maven.
 
-1. Ouvrez le **Panneau de configuration**.
-2. Allez dans **Système** > **Paramètres système avancés** > **Variables d'environnement**.
-3. Dans la section **Variables système**, cliquez sur **Nouvelle** pour créer une nouvelle variable.
-   - Nom de la variable : `MAVEN_HOME`
-   - Valeur de la variable : `C:\apache-maven-3.8.4`
-4. Trouvez la variable `Path` dans les **Variables système** et cliquez sur **Modifier**.
-5. Ajoutez une nouvelle entrée avec le chemin vers le répertoire `bin` de Maven :
-   - `C:\apache-maven-3.8.4\bin`
-6. Cliquez sur **OK** pour enregistrer les modifications.
+2. **Extraire Maven:**
+   - Extrayez le fichier zip téléchargé dans un répertoire de votre choix, par exemple `C:\Program Files\Apache\maven`.
 
-#### Étape 4 : Vérifier l'Installation
+3. **Configurer `MAVEN_HOME` et `M2_HOME`:**
+   - Ouvrez le Panneau de configuration.
+   - Allez dans **Système et sécurité** > **Système**.
+   - Cliquez sur **Paramètres système avancés**.
+   - Dans la fenêtre Propriétés système, cliquez sur **Variables d'environnement**.
+   - Cliquez sur **Nouvelle...** sous les variables système.
+   - Ajoutez une nouvelle variable appelée `MAVEN_HOME` et réglez-la sur le chemin où vous avez extrait Maven, par exemple `C:\Program Files\Apache\maven`.
+   - Ajoutez une autre variable appelée `M2_HOME` et réglez-la sur le même chemin.
+   - Cliquez sur **OK** pour fermer les fenêtres.
 
-1. Ouvrez une nouvelle fenêtre de commande.
-2. Tapez `mvn -v` et appuyez sur Entrée.
-3. Vous devriez voir les informations de version de Maven.
+4. **Modifier la variable `Path`:**
+   - Dans les variables système, trouvez et sélectionnez la variable `Path`, puis cliquez sur **Modifier...**.
+   - Ajoutez `%MAVEN_HOME%\bin` à la liste des chemins.
+   - Cliquez sur **OK** pour fermer les fenêtres.
 
-### Sous macOS
+5. **Vérifier l'installation:**
+   - Ouvrez une nouvelle fenêtre de commande (cmd) et tapez :
+     ```bash
+     mvn -version
+     ```
+   - Si Maven est correctement configuré, vous devriez voir la version de Maven et d'autres détails s'afficher.
 
-#### Étape 1 : Installer Homebrew (si ce n'est pas déjà fait)
+## Configuration sur Linux/MacOS
 
-1. Ouvrez un terminal et tapez :
-   ```sh
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
+### Configuration de `JAVA_HOME`
 
-#### Étape 2 : Installer Maven via Homebrew
+1. **Télécharger et installer le JDK:**
+   - Téléchargez le JDK depuis le site officiel d'Oracle : [Java SE Downloads](https://www.oracle.com/java/technologies/javase-downloads.html).
+   - Installez le JDK. Notez le chemin d'installation, par exemple `/usr/lib/jvm/java-17-openjdk`.
 
-1. Ouvrez un terminal et tapez :
-   ```sh
-   brew install maven
-   ```
+2. **Configurer `JAVA_HOME`:**
+   - Ouvrez le fichier `~/.bashrc` ou `~/.zshrc` dans un éditeur de texte et ajoutez les lignes suivantes :
+     ```bash
+     export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+     export PATH=$JAVA_HOME/bin:$PATH
+     ```
+   - Remplacez `/usr/lib/jvm/java-17-openjdk` par le chemin correct vers votre installation JDK.
 
-#### Étape 3 : Vérifier l'Installation
+3. **Appliquer les changements:**
+   - Rechargez le fichier de configuration :
+     ```bash
+     source ~/.bashrc
+     ```
+     ou
+     ```bash
+     source ~/.zshrc
+     ```
 
-1. Ouvrez un terminal et tapez :
-   ```sh
-   mvn -v
-   ```
-2. Vous devriez voir les informations de version de Maven.
+4. **Vérifier la configuration:**
+   - Ouvrez un nouveau terminal et tapez :
+     ```bash
+     echo $JAVA_HOME
+     ```
+   - Cela devrait afficher le chemin vers le répertoire JDK.
+   - Ensuite, tapez :
+     ```bash
+     java -version
+     ```
+   - Vous devriez voir la version de Java installée.
 
-### Sous Linux
+### Configuration de `MAVEN_HOME`
 
-#### Étape 1 : Installer Maven via le Gestionnaire de Paquets
+1. **Télécharger Maven:**
+   - Allez sur le site officiel de Maven : [Apache Maven Download](https://maven.apache.org/download.cgi).
+   - Téléchargez la version binaire (tar.gz) de Maven.
 
-##### Pour Debian/Ubuntu
+2. **Extraire Maven:**
+   - Ouvrez un terminal et extrayez le fichier téléchargé :
+     ```bash
+     tar xzvf apache-maven-<version>-bin.tar.gz
+     ```
 
-1. Ouvrez un terminal et tapez :
-   ```sh
-   sudo apt-get update
-   sudo apt-get install maven
-   ```
+3. **Configurer `MAVEN_HOME`:**
+   - Ouvrez le fichier `~/.bashrc` ou `~/.zshrc` dans un éditeur de texte et ajoutez les lignes suivantes :
+     ```bash
+     export MAVEN_HOME=/path/to/apache-maven-<version>
+     export PATH=$MAVEN_HOME/bin:$PATH
+     ```
+   - Remplacez `/path/to/apache-maven-<version>` par le chemin où vous avez extrait Maven.
 
-##### Pour Fedora
+4. **Appliquer les changements:**
+   - Rechargez le fichier de configuration :
+     ```bash
+     source ~/.bashrc
+     ```
+     ou
+     ```bash
+     source ~/.zshrc
+     ```
 
-1. Ouvrez un terminal et tapez :
-   ```sh
-   sudo dnf install maven
-   ```
+5. **Vérifier l'installation:**
+   - Ouvrez un nouveau terminal et tapez :
+     ```bash
+     mvn -version
+     ```
+   - Si Maven est correctement configuré, vous devriez voir la version de Maven et d'autres détails s'afficher.
 
-#### Étape 2 : Vérifier l'Installation
 
-1. Ouvrez un terminal et tapez :
-   ```sh
-   mvn -v
-   ```
-2. Vous devriez voir les informations de version de Maven.
+
+
 
 ### Configuration de JaCoCo dans le fichier `pom.xml`
 
