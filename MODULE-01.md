@@ -588,83 +588,136 @@ public class UserServiceTest {
 
 Ce test utilise Mockito pour vérifier que la méthode `getUserById` de `UserService` fonctionne correctement en renvoyant le bon utilisateur lorsqu'elle est appelée avec un identifiant donné.
 
-#### Partie 2 : Coverage des Tests avec JaCoCo (30 minutes)
+Voici une version corrigée et complète de la procédure pour configurer et utiliser JaCoCo avec Maven, avec des explications détaillées pour chaque étape :
+
+### Partie 2 : Coverage des Tests avec JaCoCo (30 minutes)
 
 JaCoCo est un outil de couverture de code qui vous aide à voir quelles parties de votre code sont couvertes par des tests et lesquelles ne le sont pas.
 
-1. **Ajouter les dépendances JaCoCo :**
+### Étapes pour Configurer JaCoCo avec Maven
 
-   Ajoutez JaCoCo à votre fichier `pom.xml` (pour Maven) ou `build.gradle` (pour Gradle).
+#### 1. Ajouter les Dépendances JaCoCo
 
-   **Pour Maven :**
+Ajoutez JaCoCo à votre fichier `pom.xml`.
 
-   ```xml
-   <plugin>
-       <groupId>org.jacoco</groupId>
-       <artifactId>jacoco-maven-plugin</artifactId>
-       <version>0.8.8</version>
-       <executions>
-           <execution>
-               <goals>
-                   <goal>prepare-agent</goal>
-               </goals>
-           </execution>
-           <execution>
-               <id>report</id>
-               <phase>test</phase>
-               <goals>
-                   <goal>report</goal>
-               </goals>
-           </execution>
-       </executions>
-   </plugin>
-   ```
+**Fichier `pom.xml` Complet avec JaCoCo**
 
-   **Pour Gradle :**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-   ```groovy
-   plugins {
-       id 'jacoco'
-   }
+    <groupId>fr.doranco</groupId>
+    <artifactId>testUnitaire</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-   jacoco {
-       toolVersion = '0.8.8'
-   }
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-   test {
-       finalizedBy jacocoTestReport
-   }
+    <dependencies>
+        <!-- Dépendance pour JUnit Jupiter API -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
 
-   jacocoTestReport {
-       reports {
-           xml.enabled true
-           html.enabled true
-       }
-   }
-   ```
+        <!-- Dépendance pour JUnit Jupiter Engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
 
-2. **Analyser la couverture des tests :**
+        <!-- Dépendance pour Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-   Exécutez vos tests et générez le rapport de couverture.
+    <build>
+        <plugins>
+            <!-- Plugin JaCoCo pour la couverture de code -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <!-- Prépare l'agent JaCoCo avant l'exécution des tests -->
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- Génère le rapport de couverture après l'exécution des tests -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
 
-   **Avec Maven :**
+#### 2. Analyser la Couverture des Tests
 
-   ```bash
-   mvn clean test
-   mvn jacoco:report
-   ```
+Exécutez vos tests et générez le rapport de couverture avec les commandes Maven suivantes.
 
-   **Avec Gradle :**
+**Avec Maven :**
 
-   ```bash
-   ./gradlew test jacocoTestReport
-   ```
+```bash
+mvn clean test
+mvn jacoco:report
+```
 
-3. **Visualiser les résultats :**
+- **mvn clean test**: Cette commande nettoie le projet, compile le code source, et exécute les tests définis dans le projet. JaCoCo est configuré pour surveiller l'exécution des tests et enregistrer les informations de couverture de code.
+- **mvn jacoco:report**: Cette commande génère un rapport HTML détaillant la couverture de code pour les tests exécutés.
 
-   Ouvrez le fichier `target/site/j
+#### 3. Visualiser les Résultats
 
-acoco/index.html` pour voir le rapport de couverture ou le dossier `build/reports/jacoco/test/html/index.html` pour Gradle. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
+Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couverture. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
+
+### Explications Détailées
+
+1. **Configuration du Plugin JaCoCo** :
+   - Le plugin JaCoCo est ajouté sous la section `<plugins>` dans le `pom.xml`.
+   - **`prepare-agent`**: Configure l'agent JaCoCo pour surveiller la couverture de code pendant l'exécution des tests.
+   - **`report`**: Génère un rapport de couverture de code après l'exécution des tests.
+
+2. **Exécution des Tests** :
+   - La commande `mvn clean test` nettoie le projet, compile le code source et exécute les tests.
+   - Pendant l'exécution des tests, l'agent JaCoCo surveille quelles parties du code sont exécutées.
+
+3. **Génération du Rapport de Couverture** :
+   - La commande `mvn jacoco:report` génère un rapport de couverture basé sur les données collectées par l'agent JaCoCo.
+   - Le rapport est généré dans le dossier `target/site/jacoco/` sous forme de fichier HTML.
+
+4. **Visualisation du Rapport** :
+   - Ouvrez le fichier `index.html` dans le répertoire `target/site/jacoco/`.
+   - Le rapport montre le pourcentage de lignes et de branches de votre code couvertes par les tests, ainsi que des détails sur les classes et méthodes spécifiques.
+
+### Résumé des Commandes Maven Utilisées
+
+- **`mvn clean`**: Nettoie le projet en supprimant le répertoire `target`.
+- **`mvn test`**: Compile le code et exécute les tests.
+- **`mvn jacoco:report`**: Génère un rapport de couverture de code basé sur l'exécution des tests.
+
+
 
 ### Cycle de Développement avec Tests (TDD - Test Driven Development)
 
