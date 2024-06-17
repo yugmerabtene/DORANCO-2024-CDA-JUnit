@@ -461,29 +461,132 @@ Mockito est un framework de mock permettant de simuler des objets dans vos tests
 
 2. **Écrire un test utilisant Mockito :**
 
-   Supposons que vous ayez une classe `UserService` qui dépend d'un `UserRepository`. Vous pouvez utiliser Mockito pour mocker `UserRepository` dans vos tests.
+### Classe `User`
+La classe `User` représente un utilisateur avec un prénom et un nom de famille.
 
+```java
+package fr.doranco;
+
+public class User {
+    private String firstName;
+    private String lastName;
+
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
+}
+```
+
+### Interface `UserRepository`
+L'interface `UserRepository` définit une méthode pour trouver un utilisateur par son identifiant.
+
+```java
+package fr.doranco;
+
+public interface UserRepository {
+    User findById(int id);
+}
+```
+
+### Classe `UserService`
+La classe `UserService` utilise un `UserRepository` pour obtenir des utilisateurs.
+
+```java
+package fr.doranco;
+
+public class UserService {
+    private UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public User getUserById(int id) {
+        return userRepository.findById(id);
+    }
+}
+```
+
+### Classe de Test `UserServiceTest`
+Cette classe contient le test pour la méthode `getUserById` de `UserService`.
+
+```java
+package fr.doranco;
+
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+public class UserServiceTest {
+    @Test
+    public void testGetUserById() {
+        // Crée un mock de UserRepository
+        UserRepository mockRepo = mock(UserRepository.class);
+        
+        // Crée une instance de UserService avec le mock UserRepository
+        UserService userService = new UserService(mockRepo);
+
+        // Crée un utilisateur factice
+        User mockUser = new User("John", "Doe");
+        
+        // Définit le comportement du mock : lorsque findById(1) est appelé, retourne mockUser
+        when(mockRepo.findById(1)).thenReturn(mockUser);
+
+        // Appelle la méthode getUserById et vérifie le résultat
+        User result = userService.getUserById(1);
+        assertEquals("John Doe", result.getFullName());
+    }
+}
+```
+
+### Explication en Détail du Test
+
+1. **Création du Mock de `UserRepository` :**
    ```java
-   // Fichier: UserServiceTest.java
-   import static org.mockito.Mockito.*;
-   import static org.junit.jupiter.api.Assertions.*;
-   import org.junit.jupiter.api.Test;
-   import org.mockito.Mockito;
-
-   public class UserServiceTest {
-       @Test
-       public void testGetUserById() {
-           UserRepository mockRepo = mock(UserRepository.class);
-           UserService userService = new UserService(mockRepo);
-
-           User mockUser = new User("John", "Doe");
-           when(mockRepo.findById(1)).thenReturn(mockUser);
-
-           User result = userService.getUserById(1);
-           assertEquals("John Doe", result.getFullName());
-       }
-   }
+   UserRepository mockRepo = mock(UserRepository.class);
    ```
+   On utilise `Mockito` pour créer un mock de l'interface `UserRepository`. Un mock est un objet simulé qui imite le comportement de vraies instances dans des conditions contrôlées.
+
+2. **Création de l'Instance de `UserService` :**
+   ```java
+   UserService userService = new UserService(mockRepo);
+   ```
+   On passe le mock de `UserRepository` au constructeur de `UserService`. Cela permet à `UserService` d'utiliser le mock au lieu d'une implémentation réelle de `UserRepository`.
+
+3. **Création d'un Utilisateur Factice :**
+   ```java
+   User mockUser = new User("John", "Doe");
+   ```
+   On crée un objet `User` factice pour simuler un utilisateur avec les prénoms et noms "John Doe".
+
+4. **Définition du Comportement du Mock :**
+   ```java
+   when(mockRepo.findById(1)).thenReturn(mockUser);
+   ```
+   On utilise `Mockito` pour spécifier que lorsque la méthode `findById(1)` est appelée sur le mock `UserRepository`, elle doit retourner l'utilisateur factice `mockUser`.
+
+5. **Appel de la Méthode et Vérification du Résultat :**
+   ```java
+   User result = userService.getUserById(1);
+   assertEquals("John Doe", result.getFullName());
+   ```
+   On appelle la méthode `getUserById(1)` de `UserService` et on vérifie que le nom complet de l'utilisateur retourné est bien "John Doe".
+
+### Utilité de Mockito
+`Mockito` est une bibliothèque de simulation pour Java utilisée pour créer des objets factices (mocks) dans les tests unitaires. Son utilité principale est de :
+
+1. **Isoler le Code à Tester :** En utilisant des mocks, on peut isoler la classe à tester (ici, `UserService`) de ses dépendances externes (`UserRepository`), ce qui permet de tester son comportement de manière indépendante.
+
+2. **Contrôler les Scénarios de Test :** Les mocks permettent de définir des comportements spécifiques pour les dépendances, facilitant la simulation de divers scénarios (comme le retour d'un utilisateur spécifique pour un identifiant donné).
+
+3. **Faciliter les Tests :** Les mocks rendent les tests plus rapides et plus simples car ils ne nécessitent pas de configuration de bases de données ou d'autres ressources externes.
+
+Ce test utilise Mockito pour vérifier que la méthode `getUserById` de `UserService` fonctionne correctement en renvoyant le bon utilisateur lorsqu'elle est appelée avec un identifiant donné.
 
 #### Partie 2 : Coverage des Tests avec JaCoCo (30 minutes)
 
