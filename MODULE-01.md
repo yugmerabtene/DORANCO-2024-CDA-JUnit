@@ -718,6 +718,191 @@ Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couver
 - **`mvn jacoco:report`**: Génère un rapport de couverture de code basé sur l'exécution des tests.
 
 
+Si cela ne marche toujours pas installer la varibale d'environnement : 
+
+
+Pour installer Maven et configurer la variable d'environnement sur votre système, suivez les étapes ci-dessous selon votre système d'exploitation (Windows, macOS ou Linux).
+
+### Sous Windows
+
+#### Étape 1 : Télécharger Maven
+
+1. Accédez à la [page de téléchargement de Maven](https://maven.apache.org/download.cgi).
+2. Téléchargez la version binaire ZIP de Maven (par exemple, `apache-maven-3.8.4-bin.zip`).
+
+#### Étape 2 : Extraire l'Archive
+
+1. Extrayez l'archive téléchargée dans un répertoire, par exemple `C:\apache-maven-3.8.4`.
+
+#### Étape 3 : Configurer les Variables d'Environnement
+
+1. Ouvrez le **Panneau de configuration**.
+2. Allez dans **Système** > **Paramètres système avancés** > **Variables d'environnement**.
+3. Dans la section **Variables système**, cliquez sur **Nouvelle** pour créer une nouvelle variable.
+   - Nom de la variable : `MAVEN_HOME`
+   - Valeur de la variable : `C:\apache-maven-3.8.4`
+4. Trouvez la variable `Path` dans les **Variables système** et cliquez sur **Modifier**.
+5. Ajoutez une nouvelle entrée avec le chemin vers le répertoire `bin` de Maven :
+   - `C:\apache-maven-3.8.4\bin`
+6. Cliquez sur **OK** pour enregistrer les modifications.
+
+#### Étape 4 : Vérifier l'Installation
+
+1. Ouvrez une nouvelle fenêtre de commande.
+2. Tapez `mvn -v` et appuyez sur Entrée.
+3. Vous devriez voir les informations de version de Maven.
+
+### Sous macOS
+
+#### Étape 1 : Installer Homebrew (si ce n'est pas déjà fait)
+
+1. Ouvrez un terminal et tapez :
+   ```sh
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+
+#### Étape 2 : Installer Maven via Homebrew
+
+1. Ouvrez un terminal et tapez :
+   ```sh
+   brew install maven
+   ```
+
+#### Étape 3 : Vérifier l'Installation
+
+1. Ouvrez un terminal et tapez :
+   ```sh
+   mvn -v
+   ```
+2. Vous devriez voir les informations de version de Maven.
+
+### Sous Linux
+
+#### Étape 1 : Installer Maven via le Gestionnaire de Paquets
+
+##### Pour Debian/Ubuntu
+
+1. Ouvrez un terminal et tapez :
+   ```sh
+   sudo apt-get update
+   sudo apt-get install maven
+   ```
+
+##### Pour Fedora
+
+1. Ouvrez un terminal et tapez :
+   ```sh
+   sudo dnf install maven
+   ```
+
+#### Étape 2 : Vérifier l'Installation
+
+1. Ouvrez un terminal et tapez :
+   ```sh
+   mvn -v
+   ```
+2. Vous devriez voir les informations de version de Maven.
+
+### Configuration de JaCoCo dans le fichier `pom.xml`
+
+#### Voici la configuration complète du fichier `pom.xml` avec JaCoCo :
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>fr.doranco</groupId>
+    <artifactId>testUnitaire</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- Dépendance pour JUnit Jupiter API -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dépendance pour JUnit Jupiter Engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Dépendance pour Mockito -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Plugin JaCoCo pour la couverture de code -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.7</version>
+                <executions>
+                    <!-- Prépare l'agent JaCoCo avant l'exécution des tests -->
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- Génère le rapport de couverture après l'exécution des tests -->
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+```
+
+### Exécution des Tests et Génération du Rapport de Couverture
+
+1. **Nettoyer le projet et exécuter les tests** :
+   ```sh
+   mvn clean test
+   ```
+
+2. **Générer le rapport JaCoCo** :
+   ```sh
+   mvn jacoco:report
+   ```
+
+### Visualiser les Résultats
+
+Ouvrez le fichier `target/site/jacoco/index.html` pour voir le rapport de couverture. Vous y verrez les classes et méthodes couvertes et non couvertes par vos tests.
+
+### Résumé des Étapes
+
+1. **Installer Maven** : Téléchargez et installez Maven, puis configurez la variable d'environnement `PATH`.
+2. **Vérifier l'installation** : Utilisez la commande `mvn -v` pour vérifier que Maven est correctement installé.
+3. **Configurer JaCoCo** : Ajoutez le plugin JaCoCo à votre fichier `pom.xml`.
+4. **Exécuter les commandes Maven** : Utilisez les commandes `mvn clean test` et `mvn jacoco:report` pour exécuter les tests et générer le rapport de couverture.
+5. **Visualiser le rapport** : Ouvrez le fichier `target/site/jacoco/index.html` pour voir les résultats de la couverture des tests.
+
 
 ### Cycle de Développement avec Tests (TDD - Test Driven Development)
 
