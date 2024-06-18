@@ -41,37 +41,110 @@
 
 **Partie 1: Configuration de Selenium (1 heure)**
 
-**Installation :**
-1. Téléchargez Selenium Java Bindings depuis [SeleniumHQ](https://www.selenium.dev/downloads/).
-2. Téléchargez le driver pour votre navigateur (e.g., [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads) pour Chrome).
+**Installation et Configuration :**
+
+1. **Téléchargez Selenium Java Bindings :**
+   - Rendez-vous sur [SeleniumHQ](https://www.selenium.dev/downloads/).
+   - Téléchargez le fichier Java.
+
+2. **Téléchargez le WebDriver pour votre navigateur :**
+   - Pour Chrome : [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/downloads)
+   - Pour Firefox : [GeckoDriver](https://github.com/mozilla/geckodriver/releases)
+
+3. **Ajoutez le WebDriver au PATH système :**
+   - Décompressez le fichier téléchargé et placez le WebDriver dans un répertoire de votre choix (ex. `C:\WebDrivers` pour Windows ou `/usr/local/bin` pour macOS/Linux).
+   - Ajoutez ce répertoire au PATH système.
+
+   **Pour Windows :**
+   - Recherchez `Variables d'environnement` dans le menu Démarrer.
+   - Cliquez sur `Variables d'environnement`.
+   - Dans `Variables système`, sélectionnez `Path` puis cliquez sur `Modifier`.
+   - Ajoutez le chemin du répertoire où se trouve votre WebDriver.
+
+   **Pour macOS/Linux :**
+   - Ouvrez le terminal et ajoutez la ligne suivante à votre fichier `~/.bash_profile` ou `~/.zshrc` :
+     ```sh
+     export PATH=$PATH:/path/to/webdriver
+     ```
+   - Rechargez le profil avec `source ~/.bash_profile` ou `source ~/.zshrc`.
 
 **Setup de WebDriver :**
-1. Créez un projet Maven dans IntelliJ.
-2. Ajoutez les dépendances nécessaires dans `pom.xml` :
 
-```xml
-<dependencies>
-    <dependency>
-        <groupId>org.seleniumhq.selenium</groupId>
-        <artifactId>selenium-java</artifactId>
-        <version>4.0.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.testng</groupId>
-        <artifactId>testng</artifactId>
-        <version>7.4.0</version>
-    </dependency>
-</dependencies>
-```
+1. **Ouvrez votre projet Maven dans IntelliJ IDEA**.
+
+2. **Ajoutez les dépendances nécessaires dans `pom.xml` :**
+
+   ```xml
+   <dependencies>
+       <dependency>
+           <groupId>org.seleniumhq.selenium</groupId>
+           <artifactId>selenium-java</artifactId>
+           <version>4.0.0</version>
+       </dependency>
+       <dependency>
+           <groupId>org.testng</groupId>
+           <artifactId>testng</artifactId>
+           <version>7.4.0</version>
+           <scope>test</scope>
+       </dependency>
+   </dependencies>
+   ```
+
+3. **Synchronisez le projet Maven :**
+   - Cliquez sur l'icône `Maven` dans la barre latérale droite.
+   - Cliquez sur le bouton `Reload All Maven Projects`.
+
+---
 
 **Partie 2: Structure d'un test Selenium (1 heure)**
 
 **Éléments de base :**
-1. Initialisez WebDriver.
-2. Naviguez vers une URL.
-3. Localisez les éléments.
-4. Effectuez des actions (clics, saisie de texte).
-5. Vérifiez les résultats.
+
+1. **Initialisation de WebDriver :**
+   - Ajoutez une classe de test dans `src/test/java`.
+
+   ```java
+   import org.openqa.selenium.WebDriver;
+   import org.openqa.selenium.chrome.ChromeDriver;
+   import org.testng.annotations.AfterClass;
+   import org.testng.annotations.BeforeClass;
+   import org.testng.annotations.Test;
+   import static org.testng.Assert.assertEquals;
+
+   public class BasicTest {
+       WebDriver driver;
+
+       @BeforeClass
+       public void setup() {
+           System.setProperty("webdriver.chrome.driver", "path/to/chromedriver"); // Remplacez par le chemin de votre chromedriver
+           driver = new ChromeDriver();
+           driver.get("https://example.com");
+       }
+
+       @Test
+       public void testTitle() {
+           String title = driver.getTitle();
+           assertEquals(title, "Example Domain");
+       }
+
+       @AfterClass
+       public void teardown() {
+           driver.quit();
+       }
+   }
+   ```
+
+2. **Navigation vers une URL :**
+   - Dans l'exemple ci-dessus, la ligne `driver.get("https://example.com");` navigue vers l'URL spécifiée.
+
+3. **Localisation des éléments :**
+   - Utilisez des méthodes comme `findElement(By.id("submit-button"))` pour localiser les éléments de la page.
+
+4. **Effectuer des actions (clics, saisie de texte) :**
+   - Utilisez des méthodes comme `click()` et `sendKeys("text")`.
+
+5. **Vérifiez les résultats :**
+   - Utilisez des assertions comme `assertEquals()` pour vérifier les résultats.
 
 ---
 
@@ -248,7 +321,9 @@ public class NavigationTest {
 
 ---
 
-#### 5. Outils et Pratiques Recommandées (1 heure)
+#### 5. Outils
+
+ et Pratiques Recommandées (1 heure)
 
 **Partie 1: Utilisation de Page Object Pattern (30 minutes)**
 
