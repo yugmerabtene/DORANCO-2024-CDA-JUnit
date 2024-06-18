@@ -118,13 +118,13 @@
        public void setup() {
            System.setProperty("webdriver.chrome.driver", "path/to/chromedriver"); // Remplacez par le chemin de votre chromedriver
            driver = new ChromeDriver();
-           driver.get("https://example.com");
+           driver.get("https://www.google.com");
        }
 
        @Test
        public void testTitle() {
            String title = driver.getTitle();
-           assertEquals(title, "Example Domain");
+           assertEquals(title, "Google");
        }
 
        @AfterClass
@@ -135,10 +135,10 @@
    ```
 
 2. **Navigation vers une URL :**
-   - Dans l'exemple ci-dessus, la ligne `driver.get("https://example.com");` navigue vers l'URL spécifiée.
+   - Dans l'exemple ci-dessus, la ligne `driver.get("https://www.google.com");` navigue vers l'URL spécifiée.
 
 3. **Localisation des éléments :**
-   - Utilisez des méthodes comme `findElement(By.id("submit-button"))` pour localiser les éléments de la page.
+   - Utilisez des méthodes comme `findElement(By.name("q"))` pour localiser les éléments de la page.
 
 4. **Effectuer des actions (clics, saisie de texte) :**
    - Utilisez des méthodes comme `click()` et `sendKeys("text")`.
@@ -152,29 +152,46 @@
 
 **Partie 1: Interaction avec des éléments web (1 heure)**
 
-**Exemple de code pour interagir avec des éléments :**
+**Exemple de code pour interagir avec des éléments sur Google :**
 
 ```java
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
-public class TestInteraction {
-    public static void main(String[] args) {
-        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+public class GoogleTest {
+    WebDriver driver;
 
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://example.com");
+    @BeforeClass
+    public void setup() {
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver"); // Remplacez par le chemin de votre chromedriver
+        driver = new ChromeDriver();
+        driver.get("https://www.google.com");
+    }
 
-        // Clic sur un bouton
-        WebElement button = driver.findElement(By.id("submit-button"));
-        button.click();
+    @Test
+    public void testSearch() {
+        // Localiser le champ de recherche
+        WebElement searchBox = driver.findElement(By.name("q"));
+        searchBox.sendKeys("Selenium WebDriver");
 
-        // Saisie de texte
-        WebElement inputField = driver.findElement(By.name("username"));
-        inputField.sendKeys("myUsername");
+        // Soumettre le formulaire de recherche
+        searchBox.submit();
 
+        // Attendre que la page se charge et vérifier le titre
+        new WebDriverWait(driver, 10).until(ExpectedConditions.titleContains("Selenium WebDriver"));
+
+        // Vérifier que le titre contient "Selenium WebDriver"
+        String title = driver.getTitle();
+        Assert.assertTrue(title.contains("Selenium WebDriver"), "Title check failed!");
+    }
+
+    @AfterClass
+    public void teardown() {
         driver.quit();
     }
 }
@@ -194,27 +211,26 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class TestAssertions {
+public class GoogleAssertionsTest {
     WebDriver driver;
 
     @BeforeClass
     public void setup() {
         System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
         driver = new ChromeDriver();
-        driver.get("https://example.com");
+        driver.get("https://www.google.com");
     }
 
     @Test
     public void testTitle() {
         String title = driver.getTitle();
-        Assert.assertEquals(title, "Expected Title");
+        Assert.assertEquals(title, "Google");
     }
 
     @Test
-    public void testElementText() {
-        WebElement element = driver.findElement(By.id("welcome-message"));
-        String text = element.getText();
-        Assert.assertEquals(text, "Welcome to Example.com");
+    public void testSearchBoxPresence() {
+        WebElement searchBox = driver.findElement(By.name("q"));
+        Assert.assertTrue(searchBox.isDisplayed(), "Search box is not displayed!");
     }
 
     @AfterClass
@@ -234,7 +250,7 @@ public class TestAssertions {
 
 **Partie 1: Tests de formulaires (1 heure)**
 
-**Exemple de test de formulaire :**
+**Exemple de test de formulaire de recherche sur Google :**
 
 ```java
 import org.openqa.selenium.By;
@@ -246,30 +262,26 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class FormTest {
+public class GoogleFormTest {
     WebDriver driver;
 
     @BeforeClass
     public void setup() {
         System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
         driver = new ChromeDriver();
-        driver.get("https://example.com/form");
+        driver.get("https://www.google.com");
     }
 
     @Test
-    public void testFormSubmission() {
-        WebElement nameField = driver.findElement(By.name("name"));
-        nameField.sendKeys("John Doe");
+    public void testGoogleSearchForm() {
+        WebElement searchBox = driver.findElement(By.name("q"));
+        searchBox.sendKeys("TestNG");
+        searchBox.submit();
 
-        WebElement emailField = driver.findElement(By.name("email"));
-        emailField.sendKeys("john.doe@example.com");
+        new WebDriverWait(driver, 10).until(ExpectedConditions.titleContains("TestNG"));
 
-        WebElement submitButton = driver.findElement(By.id("submit"));
-        submitButton.click();
-
-        WebElement successMessage = driver.findElement(By.id("success-message"));
-        String message = successMessage.getText();
-        Assert.assertEquals(message, "Form submitted successfully!");
+        WebElement resultStats = driver.findElement(By.id("result-stats"));
+        Assert.assertTrue(resultStats.isDisplayed(), "Results stats are not displayed!");
     }
 
     @AfterClass
@@ -281,7 +293,7 @@ public class FormTest {
 
 **Partie 2: Tests de navigation (1 heure)**
 
-**Exemple de test de navigation :**
+**Exemple de test de navigation sur Google :**
 
 ```java
 import org.openqa.selenium.By;
@@ -293,23 +305,27 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class NavigationTest {
+public class GoogleNavigationTest {
     WebDriver driver;
 
     @BeforeClass
     public void setup() {
-        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+        System.set
+
+Property("webdriver.chrome.driver", "path/to/chromedriver");
         driver = new ChromeDriver();
-        driver.get("https://example.com");
+        driver.get("https://www.google.com");
     }
 
     @Test
-    public void testNavigation() {
-        WebElement link = driver.findElement(By.linkText("About Us"));
-        link.click();
+    public void testGoogleAboutNavigation() {
+        WebElement aboutLink = driver.findElement(By.linkText("About"));
+        aboutLink.click();
+
+        new WebDriverWait(driver, 10).until(ExpectedConditions.titleContains("About Google"));
 
         String currentUrl = driver.getCurrentUrl();
-        Assert.assertEquals(currentUrl, "https://example.com/about");
+        Assert.assertTrue(currentUrl.contains("/about/"), "Navigation to About page failed!");
     }
 
     @AfterClass
@@ -321,63 +337,63 @@ public class NavigationTest {
 
 ---
 
-#### 5. Outils
-
- et Pratiques Recommandées (1 heure)
+#### 5. Outils et Pratiques Recommandées (1 heure)
 
 **Partie 1: Utilisation de Page Object Pattern (30 minutes)**
 
-**Exemple de modèle Page Object :**
+**Exemple de modèle Page Object pour Google :**
 
 ```java
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class LoginPage {
+public class GoogleSearchPage {
     WebDriver driver;
 
-    By usernameField = By.name("username");
-    By passwordField = By.name("password");
-    By loginButton = By.id("login");
+    By searchBox = By.name("q");
 
-    public LoginPage(WebDriver driver) {
+    public GoogleSearchPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void setUsername(String username) {
-        driver.findElement(usernameField).sendKeys(username);
+    public void setSearchText(String searchText) {
+        driver.findElement(searchBox).sendKeys(searchText);
     }
 
-    public void setPassword(String password) {
-        driver.findElement(passwordField).sendKeys(password);
-    }
-
-    public void clickLogin() {
-        driver.findElement(loginButton).click();
+    public void submitSearch() {
+        driver.findElement(searchBox).submit();
     }
 }
 
 // Utilisation du modèle Page Object
-public class LoginTest {
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+public class GoogleSearchTest {
     WebDriver driver;
 
     @BeforeClass
     public void setup() {
         System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
         driver = new ChromeDriver();
-        driver.get("https://example.com/login");
+        driver.get("https://www.google.com");
     }
 
     @Test
-    public void testLogin() {
-        LoginPage loginPage = new LoginPage(driver);
-        loginPage.setUsername("myUsername");
-        loginPage.setPassword("myPassword");
-        loginPage.clickLogin();
+    public void testSearch() {
+        GoogleSearchPage searchPage = new GoogleSearchPage(driver);
+        searchPage.setSearchText("Selenium WebDriver");
+        searchPage.submitSearch();
 
-        String currentUrl = driver.getCurrentUrl();
-        Assert.assertEquals(currentUrl, "https://example.com/dashboard");
+        new WebDriverWait(driver, 10).until(ExpectedConditions.titleContains("Selenium WebDriver"));
+
+        String title = driver.getTitle();
+        Assert.assertTrue(title.contains("Selenium WebDriver"), "Title check failed!");
     }
 
     @AfterClass
@@ -413,13 +429,13 @@ public class CrossBrowserTest {
             System.setProperty("webdriver.gecko.driver", "path/to/geckodriver");
             driver = new FirefoxDriver();
         }
-        driver.get("https://example.com");
+        driver.get("https://www.google.com");
     }
 
     @Test
     public void testTitle() {
         String title = driver.getTitle();
-        Assert.assertEquals(title, "Expected Title");
+        Assert.assertEquals(title, "Google");
     }
 
     @AfterClass
@@ -428,3 +444,5 @@ public class CrossBrowserTest {
     }
 }
 ```
+
+---
