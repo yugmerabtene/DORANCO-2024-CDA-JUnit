@@ -1,4 +1,4 @@
-# Module-01 : Configuration et Utilisation de JUnit dans IntelliJ IDEA
+# Module-01 : Tests unitaires avec jUnit
 
 ## Durée : 8 heures
 
