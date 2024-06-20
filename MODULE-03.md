@@ -215,9 +215,7 @@
     import org.zaproxy.clientapi.core.ClientApi;
     import org.zaproxy.clientapi.core.ClientApiException;
 
-    public
-
- class ZapSQLiScan {
+    public class ZapSQLiScan {
         private static final String ZAP_ADDRESS = "localhost";
         private static final int ZAP_PORT = 8080;
         private static final String ZAP_API_KEY = "changeme";
