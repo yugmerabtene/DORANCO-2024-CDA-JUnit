@@ -325,3 +325,67 @@ public class LibraryManager {
 ### Étape 3 : Refactorisation du Code (Refactor)
 
 Après avoir fait passer les tests, nous pouvons améliorer et organiser le code si nécessaire. Dans ce cas, notre code est déjà assez simple et clair, donc peu de refactorisation est nécessaire. Nous allons ajouter quelques commentaires supplémentaires pour la clarté.
+
+---
+Rexplication plus clair ou cas ou vous ne coprenez pas le process : 
+
+
+Le développement piloté par les tests (Test-Driven Development ou TDD) est une méthodologie de développement logiciel où les tests sont écrits avant le code de production. Cette approche se déroule en trois phases principales : rouge, vert, et refactorisation. Voici une explication détaillée de chacune de ces phases :
+
+### Phase Rouge
+
+1. **Écriture d'un test** :
+    - Avant de commencer à écrire du code de production, un développeur écrit un test automatisé pour une fonctionnalité spécifique.
+    - Ce test est généralement simple et se concentre sur une petite partie du comportement attendu du système.
+    
+2. **Exécution du test** :
+    - Le test est exécuté immédiatement après avoir été écrit.
+    - **But** : Le test doit échouer car le code de production n'est pas encore écrit. Cela confirme que le test est valide et qu'il détectera correctement l'absence de la fonctionnalité.
+
+### Phase Verte
+
+1. **Écriture du code minimal pour passer le test** :
+    - Le développeur écrit juste assez de code de production pour faire passer le test.
+    - Ce code n'est pas nécessairement bien structuré ou optimisé. L'objectif est simplement de passer de l'état "échec du test" à "succès du test".
+    
+2. **Exécution du test** :
+    - Le test est exécuté à nouveau pour vérifier que la nouvelle implémentation le fait passer.
+    - **But** : Le test doit réussir, ce qui prouve que le code écrit satisfait à la condition définie par le test.
+
+### Phase de Refactorisation
+
+1. **Nettoyage du code** :
+    - Une fois que le test passe, le développeur améliore le code. Cela peut inclure la suppression de la duplication, la clarification de la logique, et l'application de bonnes pratiques de conception.
+    
+2. **Exécution des tests** :
+    - Après avoir refactorisé, tous les tests (nouveaux et existants) doivent être exécutés pour s'assurer qu'aucun comportement n'a été involontairement modifié.
+    - **But** : Maintenir la qualité du code sans introduire de régressions.
+
+### Pourquoi les tests doivent échouer initialement ?
+
+1. **Validation du test** :
+    - Un test qui échoue initialement prouve qu'il est valide et qu'il détecte effectivement l'absence de la fonctionnalité.
+    
+2. **Motivation pour écrire du code** :
+    - Un test qui échoue fournit une motivation immédiate et spécifique pour écrire le code nécessaire pour faire passer ce test.
+
+3. **Prévention de faux positifs** :
+    - Si un test réussit immédiatement, il se peut qu'il ne soit pas correctement configuré ou qu'il ne teste pas réellement la fonctionnalité prévue.
+
+4. **Cycle de feedback rapide** :
+    - En commençant par un test qui échoue, le développeur bénéficie d'un cycle de feedback rapide, facilitant la détection et la correction des erreurs dès les premières étapes du développement.
+
+### Exemple Pratique
+
+1. **Phase Rouge** :
+    - Écrire un test : `assert add(1, 1) == 2`
+    - Exécution : Le test échoue car la fonction `add` n'est pas définie.
+
+2. **Phase Verte** :
+    - Écrire le code : `def add(a, b): return a + b`
+    - Exécution : Le test passe.
+
+3. **Refactorisation** :
+    - Améliorer le code si nécessaire, par exemple, ajouter des validations ou simplifier la logique.
+    - Exécution : Tous les tests passent.
+
