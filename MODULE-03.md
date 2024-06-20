@@ -4,7 +4,7 @@
 
 ### Objectifs:
 1. Comprendre les tests de sécurité
-2. Utiliser OWASP ZAP pour tester les vulnérabilités
+2. Utiliser OWASP ZAP pour tester les vulnérabilités en Java
 
 ---
 
@@ -46,50 +46,16 @@
 
   ![Installation de OWASP ZAP](https://www.zaproxy.org/img/logo.svg)
 
-**Partie 2: Configuration de base (30 minutes)**
-  - **Démarrage de ZAP :**
-    - Lancez ZAP et configurez les paramètres initiaux :
-      - **Langue :** Choisissez votre langue préférée.
-      - **Mode de scan :** Sélectionnez le mode adapté à votre niveau (débutant, intermédiaire, avancé).
-  - **Configurer le proxy local :**
-    - **Pour Firefox :**
-      1. Allez dans `Préférences` > `Paramètres réseau`.
-      2. Sélectionnez `Configuration manuelle du proxy`.
-      3. Entrez `localhost` et le port `8080` pour le `Proxy HTTP` et `Proxy SSL`.
-      4. Cliquez sur `OK` pour enregistrer les modifications.
-  - **Importer et configurer des certificats :**
-    - **Pour Firefox :**
-      1. Allez dans `Préférences` > `Vie privée & Sécurité` > `Certificats` > `Voir les certificats`.
-      2. Cliquez sur `Importer` et sélectionnez le certificat de ZAP (généralement disponible dans le répertoire ZAP).
-      3. Suivez les instructions pour importer le certificat et redémarrez le navigateur si nécessaire.
+**Partie 2: Configuration de ZAP (30 minutes)**
+  - **Démarrage de ZAP en mode démon :**
+    - Pour utiliser l'API de OWASP ZAP avec Java, lancez ZAP en mode démon avec l'API activée :
+      ```sh
+      zap.sh -daemon -config api.key=YOUR_API_KEY
+      ```
 
 ---
 
-#### Exploration de l'Interface et Fonctionnalités de Base (1 heure)
-
-**Partie 1: Exploration de l'interface (30 minutes)**
-  - **Vue d'ensemble :**
-    - **Arborescence des sites :** Liste des sites scannés.
-    - **Fenêtre de sortie :** Logs et résultats des scans.
-    - **Panneau de contrôle :** Accès rapide aux principales fonctionnalités et configurations.
-  - **Comprendre les différentes sections :**
-    - **Sites :** Affiche la structure du site scanné.
-    - **Alertes :** Liste des vulnérabilités détectées.
-    - **Historique :** Enregistre toutes les requêtes et réponses HTTP.
-
-**Partie 2: Principales fonctionnalités (30 minutes)**
-  - **Quick Start :** Lancer rapidement un scan de base.
-    - Cliquez sur `Quick Start` puis entrez l'URL de la cible et cliquez sur `Attack`.
-  - **Spider :** Explorer automatiquement un site pour trouver des pages et des formulaires.
-    - Sélectionnez une URL dans l'arborescence des sites, cliquez droit et choisissez `Attack` > `Spider`.
-  - **Active Scan :** Scanner activement pour détecter les vulnérabilités.
-    - Sélectionnez une URL dans l'arborescence des sites, cliquez droit et choisissez `Attack` > `Active Scan`.
-  - **HUD (Heads Up Display) :** Interface web intégrée pour faciliter les tests.
-    - Activez le HUD depuis le panneau de configuration et naviguez sur le site cible pour voir les indicateurs de vulnérabilités en temps réel.
-
----
-
-#### Utilisation de l'API OWASP ZAP (2 heures)
+#### Utilisation de l'API OWASP ZAP avec Java (2 heures)
 
 **Partie 1: Configuration et utilisation de l'API en Java (1 heure)**
 - **Ajouter la dépendance Maven :**
@@ -121,7 +87,7 @@
               // Wait for the spider to complete
               while (true) {
                   Thread.sleep(1000);
-                  int progress = Integer.parseInt(api.spider.status("0").toString());
+                  int progress = Integer.parseInt(api.spider.status("0"));
                   System.out.println("Spider progress: " + progress + "%");
                   if (progress >= 100) break;
               }
@@ -131,7 +97,7 @@
               // Wait for the active scan to complete
               while (true) {
                   Thread.sleep(1000);
-                  int progress = Integer.parseInt(api.ascan.status("0").toString());
+                  int progress = Integer.parseInt(api.ascan.status("0"));
                   System.out.println("Active scan progress: " + progress + "%");
                   if (progress >= 100) break;
               }
@@ -148,7 +114,7 @@
 **Partie 2: Automatisation des Tests de Sécurité (1 heure)**
 - **Scans automatiques :**
   - **Lancer un scan automatique :**
-    - Utilisez l'option Quick Start pour scanner rapidement une URL.
+    - Utilisez l'API pour configurer et lancer des scans automatiques.
     - Configurer des options avancées :
       - **Scope :** Définir la portée du scan pour inclure/exclure certaines parties du site.
       - **Exclusions :** Spécifier les URL ou motifs à exclure du scan.
@@ -172,19 +138,17 @@
               // Wait for the spider to complete
               while (true) {
                   Thread.sleep(1000);
-                  int progress = Integer.parseInt(api.spider.status("0").toString());
+                  int progress = Integer.parseInt(api.spider.status("0"));
                   System.out.println("Spider progress: " + progress + "%");
                   if (progress >= 100) break;
               }
 
-              System.out.println
-
-("Starting Active scan...");
+              System.out.println("Starting Active scan...");
               api.ascan.scan("http://example.com", "True", "False", null, null, null);
               // Wait for the active scan to complete
               while (true) {
                   Thread.sleep(1000);
-                  int progress = Integer.parseInt(api.ascan.status("0").toString());
+                  int progress = Integer.parseInt(api.ascan.status("0"));
                   System.out.println("Active scan progress: " + progress + "%");
                   if (progress >= 100) break;
               }
@@ -198,125 +162,103 @@
   }
   ```
 
-- **Tests manuels avec ZAP :**
-  - **Utilisation du HUD :**
-    - Intégrez le HUD dans votre session de navigation pour des tests interactifs.
-    - **Avantages du HUD :**
-      - Visualisation des vulnérabilités en temps réel.
-      - Interface conviviale pour exécuter des attaques manuelles.
-  - **Injection de scripts :**
-    - Manuellement injecter des payloads pour tester les vulnérabilités.
-    - **Exemple de test XSS :**
-      - Naviguez jusqu'à un formulaire d'entrée.
-      - Saisissez un payload XSS comme `<script>alert('XSS')</script>` dans un champ de texte.
-      - Soumettez le formulaire et observez si l'alerte JavaScript est exécutée.
-
 ---
 
-#### Pause déjeuner (1 heure)
+#### Exemples Pratiques en Java (2 heures)
 
----
-
-#### Exemples Pratiques (2 heures)
-
-**Partie 1: Détection des vulnérabilités XSS (1 heure)**
+**Détection des Vulnérabilités XSS (1 heure)**
 - **Étapes :**
   - Choisir une cible vulnérable.
-  - Utiliser le module de scanner XSS.
+  - Utiliser l'API pour lancer un scan passif et actif.
   - Analyser et interpréter les résultats.
-    - **Vérification des alertes :** Consulter les alertes générées par ZAP pour les entrées XSS.
-    - **Examen des requêtes/réponses :** Analyser les requêtes HTTP et les réponses pour identifier les vulnérabilités exploitées.
+  - **Exemple de Code pour un Scan XSS :**
+    ```java
+    import org.zaproxy.clientapi.core.ClientApi;
+    import org.zaproxy.clientapi.core.ClientApiException;
 
-  ```java
-  // Exemple d'injection XSS avec OWASP ZAP API
-  import org.zaproxy.clientapi.core.ClientApi;
-  import org.zaproxy.clientapi.core.ClientApiException;
+    public class ZapXSSScan {
+        private static final String ZAP_ADDRESS = "localhost";
+        private static final int ZAP_PORT = 8080;
+        private static final String ZAP_API_KEY = "changeme";
 
-  public class ZapXSSScan {
-      private static final String ZAP_ADDRESS = "localhost";
-      private static final int ZAP_PORT = 8080;
-      private static final String ZAP_API_KEY = "changeme";
+        public static void main(String[] args) {
+            ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
 
-      public static void main(String[] args) {
-          ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
+            try {
+                System.out.println("Starting XSS scan...");
+                api.pscan.enableAllScanners();
+                api.pscan.scan("http://example.com");
 
-          try {
-              System.out.println("Starting XSS scan...");
-              api.pscan.enableAllScanners();
-              api.pscan.scan("http://example.com");
+                // Wait for the passive scan to complete
+                while (true) {
+                    Thread.sleep(1000);
+                    int recordsToScan = Integer.parseInt(api.pscan.recordsToScan());
+                    if (recordsToScan == 0) break;
+                }
 
-              // Wait for the passive scan to complete
-              while (true) {
-                  Thread.sleep(1000);
-                  int recordsToScan = Integer.parseInt(api.pscan.recordsToScan().toString());
-                  if (recordsToScan == 0) break;
-              }
+                System.out.println("XSS scan completed.");
 
-              System.out.println("XSS scan completed.");
+            } catch (ClientApiException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    ```
 
-          } catch (ClientApiException | InterruptedException e) {
-              e.printStackTrace();
-          }
-      }
-  }
-  ```
-
-**Partie 2: Détection des vulnérabilités SQL Injection (1 heure)**
+**Détection des Vulnérabilités SQL Injection (1 heure)**
 - **Étapes :**
   - Choisir une cible vulnérable.
-  - Utiliser le module de scanner SQLi.
+  - Utiliser l'API pour lancer un scan passif et actif.
   - Analyser et interpréter les résultats.
-    - **Vérification des alertes :** Consulter les alertes générées par ZAP pour les injections SQL.
-    - **Examen des requêtes/réponses :** Analyser les requêtes HTTP et les réponses pour identifier les vulnérabilités exploitées.
+  - **Exemple de Code pour un Scan SQL Injection :**
+    ```java
+    import org.zaproxy.clientapi.core.ClientApi;
+    import org.zaproxy.clientapi.core.ClientApiException;
 
-  ```java
-  // Exemple d'injection SQL avec OWASP ZAP API
-  import org.zaproxy.clientapi.core.ClientApi;
-  import org.zaproxy.clientapi.core.ClientApiException;
+    public
 
-  public class ZapSQLiScan {
-      private static final String ZAP_ADDRESS = "localhost";
-      private static final int ZAP_PORT = 8080;
-      private static final String ZAP_API_KEY = "changeme";
+ class ZapSQLiScan {
+        private static final String ZAP_ADDRESS = "localhost";
+        private static final int ZAP_PORT = 8080;
+        private static final String ZAP_API_KEY = "changeme";
 
-      public static void main(String[] args) {
-          ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
+        public static void main(String[] args) {
+            ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
 
-          try {
-              System.out.println("Starting SQL Injection scan...");
-              api.pscan.enableAllScanners();
-              api.pscan.scan("http://example.com");
+            try {
+                System.out.println("Starting SQL Injection scan...");
+                api.pscan.enableAllScanners();
+                api.pscan.scan("http://example.com");
 
-              // Wait for the passive scan to complete
-              while (true) {
-                  Thread.sleep(1000);
-                  int recordsToScan = Integer.parseInt(api.pscan.recordsToScan().toString());
-                  if (recordsToScan == 0) break;
-              }
+                // Wait for the passive scan to complete
+                while (true) {
+                    Thread.sleep(1000);
+                    int recordsToScan = Integer.parseInt(api.pscan.recordsToScan());
+                    if (recordsToScan == 0) break;
+                }
 
-              System.out.println("SQL Injection scan completed.");
+                System.out.println("SQL Injection scan completed.");
 
-          } catch (ClientApiException | InterruptedException e) {
-              e.printStackTrace();
-          }
-      }
-  }
-  ```
+            } catch (ClientApiException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    ```
 
 ---
 
 #### Intégration des Tests de Sécurité dans le Pipeline CI/CD (2 heures)
 
-**Partie 1: Présentation et configuration (30 minutes)**
+**Présentation et Configuration de GitHub Actions (1 heure)**
 - **Intégration continue :**
   - **Présentation :** Comprendre l'importance d'intégrer les tests de sécurité dans le pipeline CI/CD.
   - **Configuration de base :** Utilisation de GitHub Actions pour automatiser les scans de sécurité avec OWASP ZAP.
 
-**Partie 2: Configuration de GitHub Actions (1 heure 30 minutes)**
-- **Étapes détaillées :**
-  1. **Créer un fichier de workflow GitHub Actions :**
-     - Créez un répertoire `.github/workflows` à la racine de votre projet.
-     - Ajoutez un fichier `zap_scan.yml` dans ce répertoire.
+**Étapes Détailées pour Configurer GitHub Actions (1 heure)**
+1. **Créer un fichier de workflow GitHub Actions :**
+   - Créez un répertoire `.github/workflows` à la racine de votre projet.
+   - Ajoutez un fichier `zap_scan.yml` dans ce répertoire.
 
   ```yaml
   name: OWASP ZAP Scan
@@ -352,28 +294,19 @@
           path: zap_report.html
   ```
 
-  2. **Explication du fichier de workflow :**
-     - **Déclencheurs :** Le workflow s'exécute sur chaque push ou pull request vers la branche principale.
-     - **Jobs :** Le job `zap_scan` s'exécute sur un environnement `ubuntu-latest`.
-     - **Étapes :**
-       - **Checkout du dépôt :** Utilise l'action `actions/checkout@v2` pour extraire le code du dépôt.
-       - **Démarrer OWASP ZAP :** Utilise Docker pour lancer OWASP ZAP en mode démon.
-       - **Exécuter le scan de base ZAP :** Exécute le scan de base de ZAP sur l'URL spécifiée et génère un rapport HTML.
-       - **Télécharger le rapport ZAP :** Utilise l'action `actions/upload-artifact@v2` pour enregistrer le rapport généré.
+2. **Configurer les secrets GitHub :**
+   - Si nécessaire, ajoutez des secrets pour l'API de ZAP ou d'autres configurations sensibles dans les paramètres du dépôt GitHub.
+     - Allez dans `Settings` > `Secrets` > `New repository secret`.
+     - Ajoutez les clés nécessaires comme `ZAP_API_KEY`.
 
-  3. **Configurer les secrets GitHub :**
-     - Si nécessaire, ajoutez des secrets pour l'API de ZAP ou d'autres configurations sensibles dans les paramètres du dépôt GitHub.
-       - Allez dans `Settings` > `Secrets` > `New repository secret`.
-       - Ajoutez les clés nécessaires comme `ZAP_API_KEY`.
-
-  4. **Exécuter et vérifier les résultats :**
-     - Poussez les modifications vers le dépôt GitHub.
-     - Vérifiez les exécutions du workflow dans l'onglet "Actions" du dépôt.
-     - Téléchargez et analysez le rapport ZAP pour identifier les vulnérabilités.
-     - **Interprétation du rapport :**
-       - **Alertes :** Chaque alerte identifie une vulnérabilité potentielle.
-       - **Description :** Les détails de la vulnérabilité détectée.
-       - **Recommandations :** Actions suggérées pour remédier à la vulnérabilité.
+3. **Exécuter et vérifier les résultats :**
+   - Poussez les modifications vers le dépôt GitHub.
+   - Vérifiez les exécutions du workflow dans l'onglet "Actions" du dépôt.
+   - Téléchargez et analysez le rapport ZAP pour identifier les vulnérabilités.
+   - **Interprétation du rapport :**
+     - **Alertes :** Chaque alerte identifie une vulnérabilité potentielle.
+     - **Description :** Les détails de la vulnérabilité détectée.
+     - **Recommandations :** Actions suggérées pour remédier à la vulnérabilité.
 
 ---
 
@@ -399,9 +332,7 @@
 
           try {
               byte[] report = api.core.htmlreport();
-              java.nio.file.Files.write(java
-
-.nio.file.Paths.get("zap_report.html"), report);
+              java.nio.file.Files.write(java.nio.file.Paths.get("zap_report.html"), report);
               System.out.println("Report generated.");
 
           } catch (ClientApiException | java.io.IOException e) {
@@ -438,4 +369,3 @@
    - **Certificats :**
      - Importez le certificat de ZAP dans votre navigateur pour intercepter les connexions HTTPS.
 
----
