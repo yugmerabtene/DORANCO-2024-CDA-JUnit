@@ -47,6 +47,102 @@
   ![Installation de OWASP ZAP](https://www.zaproxy.org/img/logo.svg)
 
 **Partie 2: Configuration de ZAP (30 minutes)**
+
+Pour obtenir et configurer une clé API sécurisée pour OWASP ZAP, suivez les étapes ci-dessous :
+
+### 1. Configurer une Clé API dans OWASP ZAP
+
+OWASP ZAP vous permet de configurer une clé API pour sécuriser l'accès à son API. Voici comment le faire :
+
+#### a. Via l'interface graphique de OWASP ZAP
+
+1. **Lancer OWASP ZAP** : Ouvrez OWASP ZAP en mode graphique.
+2. **Aller dans les options** :
+   - Cliquez sur `Tools` (Outils) dans la barre de menu.
+   - Sélectionnez `Options`.
+3. **Configurer l'API** :
+   - Dans la fenêtre des options, allez dans la section `API`.
+   - Cochez `Enable the ZAP API` pour activer l'API.
+   - Dans le champ `Key`, entrez une clé API sécurisée de votre choix.
+   - Cliquez sur `OK` pour enregistrer les paramètres.
+
+#### b. Via la ligne de commande
+
+Vous pouvez également spécifier la clé API lorsque vous démarrez OWASP ZAP en mode démon. Utilisez l'option `-config api.key` pour définir la clé API. Par exemple :
+
+```bash
+zap.sh -daemon -config api.key=mySecureApiKey123
+```
+
+Remplacez `mySecureApiKey123` par une clé API sécurisée de votre choix.
+
+### 2. Utiliser la Clé API dans Votre Code Java
+
+Une fois que vous avez configuré la clé API dans OWASP ZAP, utilisez cette clé dans votre code Java pour authentifier les requêtes à l'API. Voici un exemple complet avec la clé API configurée :
+
+```java
+import org.zaproxy.clientapi.core.ClientApi;
+import org.zaproxy.clientapi.core.ClientApiException;
+
+public class ZapApiExample {
+
+    private static final String ZAP_ADDRESS = "localhost";
+    private static final int ZAP_PORT = 8080;
+    private static final String ZAP_API_KEY = "mySecureApiKey123";
+
+    public static void main(String[] args) {
+        ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
+        
+        try {
+            // Démarrer une nouvelle session ZAP
+            api.core.newSession("new_session", true);
+            
+            // Ouvrir une URL dans ZAP
+            api.urlopen("http://your-application-url");
+
+            // Lancer un scan de spider
+            System.out.println("Starting Spider Scan...");
+            api.spider.scan("http://your-application-url");
+            while (Integer.parseInt(api.spider.status("0")) < 100) {
+                System.out.println("Spider progress: " + api.spider.status("0") + "%");
+                Thread.sleep(2000);
+            }
+            System.out.println("Spider Scan completed.");
+
+            // Lancer un scan actif
+            System.out.println("Starting Active Scan...");
+            api.ascan.scan("http://your-application-url", "True", "False", null, null, null);
+            while (Integer.parseInt(api.ascan.status("0")) < 100) {
+                System.out.println("Active Scan progress: " + api.ascan.status("0") + "%");
+                Thread.sleep(5000);
+            }
+            System.out.println("Active Scan completed.");
+
+            // Générer un rapport HTML
+            byte[] report = api.core.htmlreport();
+            java.nio.file.Files.write(java.nio.file.Paths.get("zap_report.html"), report);
+
+            System.out.println("Report generated: zap_report.html");
+
+        } catch (ClientApiException | InterruptedException | java.io.IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+### Récapitulatif
+
+1. **Configurer la Clé API dans OWASP ZAP** :
+   - Via l'interface graphique : `Tools` > `Options` > `API` > `Enable the ZAP API` > `Key`.
+   - Via la ligne de commande : `zap.sh -daemon -config api.key=mySecureApiKey123`.
+
+2. **Utiliser la Clé API dans le Code Java** :
+   - Assurez-vous que la clé API dans le code Java correspond à celle configurée dans OWASP ZAP (`mySecureApiKey123` dans cet exemple).
+
+
+
+
   - **Démarrage de ZAP en mode démon :**
     - Pour utiliser l'API de OWASP ZAP avec Java, lancez ZAP en mode démon avec l'API activée :
       ```sh
