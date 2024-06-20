@@ -89,24 +89,28 @@
 
 ---
 
-#### Écriture de Tests de Sécurité (2 heures)
+#### Utilisation de l'API OWASP ZAP (2 heures)
 
-**Partie 1: Scans automatiques (1 heure)**
-- **Lancer un scan automatique :**
-  - Utilisez l'option Quick Start pour scanner rapidement une URL.
-  - Configurer des options avancées :
-    - **Scope :** Définir la portée du scan pour inclure/exclure certaines parties du site.
-    - **Exclusions :** Spécifier les URL ou motifs à exclure du scan.
+**Partie 1: Configuration et utilisation de l'API en Java (1 heure)**
+- **Ajouter la dépendance Maven :**
+  - Ajoutez la dépendance suivante dans votre fichier `pom.xml` :
+    ```xml
+    <dependency>
+      <groupId>org.zaproxy</groupId>
+      <artifactId>clientapi</artifactId>
+      <version>1.9.0</version>
+    </dependency>
+    ```
 
+- **Exemple de code pour automatiser un scan :**
   ```java
-  // Exemple de configuration de scan en Java avec OWASP ZAP API
   import org.zaproxy.clientapi.core.ClientApi;
   import org.zaproxy.clientapi.core.ClientApiException;
 
   public class ZapScanner {
       private static final String ZAP_ADDRESS = "localhost";
       private static final int ZAP_PORT = 8080;
-      private static final String ZAP_API_KEY = "changeme";
+      private static final String ZAP_API_KEY = "YOUR_API_KEY";
 
       public static void main(String[] args) {
           ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
@@ -141,8 +145,60 @@
   }
   ```
 
-**Partie 2: Tests manuels avec ZAP (1 heure)**
-- **Tests manuels :**
+**Partie 2: Automatisation des Tests de Sécurité (1 heure)**
+- **Scans automatiques :**
+  - **Lancer un scan automatique :**
+    - Utilisez l'option Quick Start pour scanner rapidement une URL.
+    - Configurer des options avancées :
+      - **Scope :** Définir la portée du scan pour inclure/exclure certaines parties du site.
+      - **Exclusions :** Spécifier les URL ou motifs à exclure du scan.
+
+  ```java
+  // Exemple de configuration de scan en Java avec OWASP ZAP API
+  import org.zaproxy.clientapi.core.ClientApi;
+  import org.zaproxy.clientapi.core.ClientApiException;
+
+  public class ZapScanner {
+      private static final String ZAP_ADDRESS = "localhost";
+      private static final int ZAP_PORT = 8080;
+      private static final String ZAP_API_KEY = "changeme";
+
+      public static void main(String[] args) {
+          ClientApi api = new ClientApi(ZAP_ADDRESS, ZAP_PORT, ZAP_API_KEY);
+
+          try {
+              System.out.println("Starting Spider scan...");
+              api.spider.scan("http://example.com");
+              // Wait for the spider to complete
+              while (true) {
+                  Thread.sleep(1000);
+                  int progress = Integer.parseInt(api.spider.status("0").toString());
+                  System.out.println("Spider progress: " + progress + "%");
+                  if (progress >= 100) break;
+              }
+
+              System.out.println
+
+("Starting Active scan...");
+              api.ascan.scan("http://example.com", "True", "False", null, null, null);
+              // Wait for the active scan to complete
+              while (true) {
+                  Thread.sleep(1000);
+                  int progress = Integer.parseInt(api.ascan.status("0").toString());
+                  System.out.println("Active scan progress: " + progress + "%");
+                  if (progress >= 100) break;
+              }
+
+              System.out.println("Scan completed.");
+
+          } catch (ClientApiException | InterruptedException e) {
+              e.printStackTrace();
+          }
+      }
+  }
+  ```
+
+- **Tests manuels avec ZAP :**
   - **Utilisation du HUD :**
     - Intégrez le HUD dans votre session de navigation pour des tests interactifs.
     - **Avantages du HUD :**
@@ -169,9 +225,7 @@
   - Utiliser le module de scanner XSS.
   - Analyser et interpréter les résultats.
     - **Vérification des alertes :** Consulter les alertes générées par ZAP pour les entrées XSS.
-    - **Examen des requêtes/réponses :** Analyser les requêtes HTTP et les réponses pour identifier les vulnérabilités exploité
-
-es.
+    - **Examen des requêtes/réponses :** Analyser les requêtes HTTP et les réponses pour identifier les vulnérabilités exploitées.
 
   ```java
   // Exemple d'injection XSS avec OWASP ZAP API
@@ -345,7 +399,9 @@ es.
 
           try {
               byte[] report = api.core.htmlreport();
-              java.nio.file.Files.write(java.nio.file.Paths.get("zap_report.html"), report);
+              java.nio.file.Files.write(java
+
+.nio.file.Paths.get("zap_report.html"), report);
               System.out.println("Report generated.");
 
           } catch (ClientApiException | java.io.IOException e) {
@@ -383,6 +439,3 @@ es.
      - Importez le certificat de ZAP dans votre navigateur pour intercepter les connexions HTTPS.
 
 ---
-
-
-érabilités courantes comme XSS et SQL Injection, et des stratégies pour le suivi des vulnérabilités détectées.
