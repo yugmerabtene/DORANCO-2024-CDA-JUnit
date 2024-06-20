@@ -301,12 +301,4 @@ zap.sh -daemon -port 8080 -config api.key=changeme'
    - **Certificats :**
      - Importez le certificat de ZAP dans votre navigateur pour intercepter les connexions HTTPS.
 
-### Améliorations Proposées:
 
-1. **Ajout de démonstrations pratiques:** Intégrer des démonstrations vidéo ou des sessions interactives pour illustrer les étapes importantes, comme l'installation de ZAP et la configuration de scans.
-2. **Incorporation de quiz et d'évaluations:** Après chaque section, ajouter des quiz pour évaluer la compréhension des participants.
-3. **Études de cas réelles:** Présenter des études de cas réelles sur les failles de sécurité découvertes grâce à OWASP ZAP.
-4. **Discussion sur la prévention:** Inclure une section sur les meilleures pratiques pour prévenir les vulnérabilités communes telles que XSS et SQL Injection.
-5. **Ressources supplémentaires:** Fournir des liens vers des ressources supplémentaires, comme des articles, des vidéos et des forums pour approfondir les connaissances sur la sécurité des applications web.
-
-Ces améliorations aideront à rendre le cours plus interactif, informatif et engageant pour les participants.
