@@ -348,6 +348,32 @@ public class ZapApiExample {
 - **Intégration continue :**
   - **Présentation :** Comprendre l'importance d'intégrer les tests de sécurité dans le pipeline CI/CD.
   - **Configuration de base :** Utilisation de GitHub Actions pour automatiser les scans de sécurité avec OWASP ZAP.
+### Intégration Continue (CI) et Tests de Sécurité
+
+L'intégration des tests de sécurité dans le pipeline CI/CD est cruciale pour garantir la sécurité des applications dès les premières étapes du développement.
+
+#### Pourquoi intégrer les tests de sécurité dans le pipeline CI/CD ?
+
+1. **Détection précoce des vulnérabilités**
+   - **Explication** : En intégrant des tests de sécurité dès les premières étapes du développement, les vulnérabilités peuvent être identifiées et corrigées avant que le code n'atteigne la production.
+   - **Avantages** : Réduction des coûts et des efforts nécessaires pour corriger les failles de sécurité, car les problèmes sont résolus plus tôt dans le cycle de développement.
+
+2. **Automatisation et efficacité**
+   - **Explication** : Automatiser les tests de sécurité dans le pipeline CI/CD permet de garantir que chaque modification de code est vérifiée pour des vulnérabilités sans intervention humaine.
+   - **Avantages** : Gain de temps, réduction des erreurs humaines et assurance que les tests sont exécutés de manière cohérente.
+
+3. **Conformité et audit**
+   - **Explication** : De nombreuses normes de sécurité et réglementations exigent que les entreprises effectuent des tests de sécurité réguliers.
+   - **Avantages** : Intégrer ces tests dans le pipeline CI/CD aide à satisfaire ces exigences de conformité et facilite les audits de sécurité.
+
+4. **Culture DevSecOps**
+   - **Explication** : DevSecOps est une culture qui intègre les pratiques de sécurité dans le cycle de développement, en mettant l'accent sur la collaboration entre les équipes de développement, de sécurité et d'opérations.
+   - **Avantages** : Encourage une responsabilité partagée pour la sécurité, améliore la communication et réduit les frictions entre les équipes.
+
+#### Configuration de base : Utilisation de GitHub Actions pour automatiser les scans de sécurité avec OWASP ZAP
+- **GitHub Actions** : GitHub Actions est une plateforme d'automatisation qui permet de créer des workflows pour automatiser les processus de développement, y compris les tests de sécurité.
+
+
 
 **Étapes Détailées pour Configurer GitHub Actions (1 heure)**
 1. **Créer un fichier de workflow GitHub Actions :**
