@@ -1,0 +1,452 @@
+### Installation de Docker sur votre PC
+
+1. **Télécharger Docker Desktop** :
+   - Allez sur le site officiel de Docker : [Docker Desktop](https://www.docker.com/products/docker-desktop) et téléchargez la version correspondant à votre système d'exploitation (Windows, macOS ou Linux).
+
+2. **Installer Docker Desktop** :
+   - Suivez les instructions d'installation pour votre système d'exploitation :
+     - **Windows** : Exécutez le fichier .exe téléchargé et suivez les instructions de l'assistant d'installation. Vous devrez peut-être redémarrer votre ordinateur après l'installation.
+     - **macOS** : Ouvrez le fichier .dmg téléchargé et déplacez Docker dans le dossier Applications. Lancez Docker depuis le dossier Applications.
+     - **Linux** : Suivez les instructions spécifiques à votre distribution sur le site officiel de Docker.
+
+3. **Vérifier l'installation** :
+   - Ouvrez une fenêtre de terminal ou de commande et exécutez :
+     ```bash
+     docker --version
+     ```
+   - Vous devriez voir la version de Docker installée.
+
+4. **Installer Docker Compose** (si ce n'est pas inclus avec Docker Desktop) :
+   - Vous pouvez vérifier si Docker Compose est déjà installé en exécutant :
+     ```bash
+     docker-compose --version
+     ```
+   - Si Docker Compose n'est pas installé, suivez les instructions sur le site officiel : [Docker Compose Install](https://docs.docker.com/compose/install/).
+
+### Configuration de l'environnement de développement avec Docker
+
+1. **Créer un dossier de projet** :
+   - Créez un nouveau dossier pour votre projet, par exemple `my-php-app`.
+
+2. **Créer la structure de dossiers** :
+   - À l'intérieur de votre projet, créez les dossiers suivants :
+     ```bash
+     my-php-app/
+     ├── src/
+     ├── docker-compose.yml
+     ├── Dockerfile
+     ├── .dockerignore
+     ```
+
+### Étape 1 : Configuration des fichiers Docker
+
+1. **Créer le Dockerfile** :
+   - À la racine de votre projet, créez un fichier nommé `Dockerfile` avec le contenu suivant :
+     ```dockerfile
+     # Utiliser une image de base officielle PHP avec Apache
+     FROM php:7.4-apache
+
+     # Installer les extensions nécessaires pour MySQL
+     RUN docker-php-ext-install mysqli pdo pdo_mysql
+
+     # Copier les fichiers de l'application dans le répertoire de travail de l'image
+     COPY src/ /var/www/html/
+
+     # Donner les permissions correctes au répertoire de travail
+     RUN chown -R www-data:www-data /var/www/html
+     ```
+
+2. **Créer le fichier docker-compose.yml** :
+   - À la racine de votre projet, créez un fichier nommé `docker-compose.yml` avec le contenu suivant :
+     ```yaml
+     version: '3.1'
+
+     services:
+       web:
+         build: .
+         ports:
+           - "8080:80"
+         volumes:
+           - ./src:/var/www/html
+         depends_on:
+           - db
+
+       db:
+         image: mysql:5.7
+         restart: always
+         environment:
+           MYSQL_ROOT_PASSWORD: root
+           MYSQL_DATABASE: testdb
+           MYSQL_USER: user
+           MYSQL_PASSWORD: password
+         ports:
+           - "3306:3306"
+         volumes:
+           - db_data:/var/lib/mysql
+
+     volumes:
+       db_data:
+     ```
+
+3. **Créer le fichier .dockerignore** :
+   - À la racine de votre projet, créez un fichier nommé `.dockerignore` avec le contenu suivant :
+     ```
+     .git
+     node_modules
+     vendor
+     ```
+
+### Étape 2 : Code de l'application
+
+1. **Créer les fichiers de l'application** :
+   - Créez les fichiers suivants dans le dossier `src` :
+
+   **index.php** :
+   ```php
+   <?php
+   $mysqli = new mysqli("db", "user", "password", "testdb");
+
+   if ($mysqli->connect_error) {
+       die("Connection failed: " . $mysqli->connect_error);
+   }
+
+   $result = $mysqli->query("SELECT * FROM users");
+   ?>
+
+   <!DOCTYPE html>
+   <html>
+   <head>
+       <title>CRUD App</title>
+       <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+       <h1>Users</h1>
+       <table>
+           <tr>
+               <th>ID</th>
+               <th>Name</th>
+               <th>Email</th>
+               <th>Actions</th>
+           </tr>
+           <?php while($row = $result->fetch_assoc()): ?>
+           <tr>
+               <td><?php echo $row['id']; ?></td>
+               <td><?php echo $row['name']; ?></td>
+               <td><?php echo $row['email']; ?></td>
+               <td>
+                   <a href="edit.php?id=<?php echo $row['id']; ?>">Edit</a>
+                   <a href="delete.php?id=<?php echo $row['id']; ?>">Delete</a>
+               </td>
+           </tr>
+           <?php endwhile; ?>
+       </table>
+       <a href="create.php">Add New User</a>
+   </body>
+   </html>
+   ```
+
+   **create.php** :
+   ```php
+   <?php
+   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+       $mysqli = new mysqli("db", "user", "password", "testdb");
+
+       if ($mysqli->connect_error) {
+           die("Connection failed: " . $mysqli->connect_error);
+       }
+
+       $name = $_POST['name'];
+       $email = $_POST['email'];
+
+       $sql = "INSERT INTO users (name, email) VALUES ('$name', '$email')";
+
+       if ($mysqli->query($sql) === TRUE) {
+           header("Location: index.php");
+       } else {
+           echo "Error: " . $sql . "<br>" . $mysqli->error;
+       }
+
+       $mysqli->close();
+   }
+   ?>
+
+   <!DOCTYPE html>
+   <html>
+   <head>
+       <title>Create User</title>
+       <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+       <h1>Create User</h1>
+       <form method="POST" action="">
+           <label>Name:</label>
+           <input type="text" name="name" required><br>
+           <label>Email:</label>
+           <input type="email" name="email" required><br>
+           <button type="submit">Create</button>
+       </form>
+       <a href="index.php">Back to Users</a>
+   </body>
+   </html>
+   ```
+
+   **edit.php** :
+   ```php
+   <?php
+   $mysqli = new mysqli("db", "user", "password", "testdb");
+
+   if ($mysqli->connect_error) {
+       die("Connection failed: " . $mysqli->connect_error);
+   }
+
+   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+       $id = $_POST['id'];
+       $name = $_POST['name'];
+       $email = $_POST['email'];
+
+       $sql = "UPDATE users SET name='$name', email='$email' WHERE id=$id";
+
+       if ($mysqli->query($sql) === TRUE) {
+           header("Location: index.php");
+       } else {
+           echo "Error: " . $sql . "<br>" . $mysqli->error;
+       }
+   } else {
+       $id = $_GET['id'];
+       $result = $mysqli->query("SELECT * FROM users WHERE id=$id");
+       $user = $result->fetch_assoc();
+   }
+
+   $mysqli->close();
+   ?>
+
+   <!DOCTYPE html>
+   <html>
+   <head>
+       <title>Edit User</title>
+       <link rel="stylesheet" href="style.css">
+   </head>
+   <body>
+       <h1>Edit User</h1>
+       <form method="POST" action="">
+           <input type="hidden" name="id" value="<?php echo $user['id']; ?>">
+           <label>Name:</label>
+           <input type="text" name="name" value="<?php echo $user['name']; ?>" required><br>
+           <label>Email:</label>
+           <input type="email" name="email" value="<?php echo $user['email']; ?>" required><br>
+           <button type="submit">Update</button>
+       </form>
+       <a href="index.php">Back to Users</a>
+   </body>
+   </html>
+   ```
+
+   **delete.php** :
+   ```php
+   <?php
+   $mysqli = new mysqli("db", "user", "password", "testdb");
+
+   if ($mysqli->connect_error) {
+       die("Connection failed: " . $mysqli->connect_error);
+   }
+
+   $id = $_GET['id'];
+   $sql = "DELETE FROM users WHERE id=$id";
+
+   if ($mysqli->query($sql) === TRUE) {
+       header("Location: index.php");
+   } else {
+       echo "Error: " . $sql . "<br>" . $mysqli->error;
+   }
+
+   $mysqli->close();
+   ?>
+   ```
+
+   **style.css** :
+   ```css
+   body {
+       font-family: Arial, sans-serif;
+       margin: 0;
+       padding: 0;
+       background-color: #f4f4f4;
+   }
+
+   h
+
+1 {
+       text-align: center;
+       margin: 20px 0;
+   }
+
+   table {
+       width: 80%;
+       margin: 20px auto;
+       border-collapse: collapse;
+   }
+
+   table, th, td {
+       border: 1px solid #ddd;
+   }
+
+   th, td {
+       padding: 8px;
+       text-align: center;
+   }
+
+   th {
+       background-color: #f2f2f2;
+   }
+
+   form {
+       width: 50%;
+       margin: 20px auto;
+       padding: 20px;
+       background-color: #fff;
+       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   }
+
+   label {
+       display: block;
+       margin-bottom: 8px;
+   }
+
+   input[type="text"], input[type="email"] {
+       width: 100%;
+       padding: 8px;
+       margin-bottom: 10px;
+       border: 1px solid #ccc;
+       border-radius: 4px;
+   }
+
+   button {
+       display: block;
+       width: 100%;
+       padding: 10px;
+       background-color: #5cb85c;
+       color: white;
+       border: none;
+       border-radius: 4px;
+       cursor: pointer;
+   }
+
+   button:hover {
+       background-color: #4cae4c;
+   }
+
+   a {
+       display: block;
+       text-align: center;
+       margin-top: 20px;
+       color: #337ab7;
+       text-decoration: none;
+   }
+
+   a:hover {
+       text-decoration: underline;
+   }
+   ```
+
+### Étape 3 : Initialiser la base de données
+
+1. **Créer un script d'initialisation pour la base de données** :
+   - Créez un fichier `init.sql` dans le dossier `src` avec le contenu suivant :
+     ```sql
+     CREATE TABLE IF NOT EXISTS users (
+         id INT AUTO_INCREMENT PRIMARY KEY,
+         name VARCHAR(255) NOT NULL,
+         email VARCHAR(255) NOT NULL
+     );
+     ```
+
+2. **Ajouter le script au service MySQL dans docker-compose.yml** :
+   - Modifiez le service `db` dans `docker-compose.yml` pour inclure le script d'initialisation :
+     ```yaml
+     db:
+       image: mysql:5.7
+       restart: always
+       environment:
+         MYSQL_ROOT_PASSWORD: root
+         MYSQL_DATABASE: testdb
+         MYSQL_USER: user
+         MYSQL_PASSWORD: password
+       ports:
+         - "3306:3306"
+       volumes:
+         - ./src/init.sql:/docker-entrypoint-initdb.d/init.sql
+         - db_data:/var/lib/mysql
+     ```
+
+### Étape 4 : Lancer l'application
+
+1. **Démarrer les conteneurs Docker** :
+   - Ouvrez le terminal intégré dans VSCode (`Ctrl+``) et exécutez la commande suivante :
+     ```bash
+     docker-compose up --build
+     ```
+
+2. **Accéder à l'application** :
+   - Ouvrez votre navigateur et allez à `http://localhost:8080`.
+
+### Étape 5 : Déployer le conteneur sur un serveur distant
+
+Pour déployer votre application Docker sur un serveur distant, suivez ces étapes :
+
+1. **Configurer votre serveur distant** :
+   - Assurez-vous que Docker est installé sur votre serveur distant.
+   - Connectez-vous à votre serveur via SSH :
+     ```bash
+     ssh user@remote_server_ip
+     ```
+
+2. **Installer Docker sur le serveur distant** :
+   - **Ubuntu** :
+     ```bash
+     sudo apt update
+     sudo apt install apt-transport-https ca-certificates curl software-properties-common
+     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+     sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+     sudo apt update
+     sudo apt install docker-ce
+     ```
+   - **CentOS** :
+     ```bash
+     sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+     sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+     sudo yum install docker-ce
+     sudo systemctl start docker
+     sudo systemctl enable docker
+     ```
+
+3. **Installer Docker Compose sur le serveur distant** :
+   - Téléchargez Docker Compose :
+     ```bash
+     sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+     sudo chmod +x /usr/local/bin/docker-compose
+     ```
+
+4. **Transférer les fichiers de votre projet** :
+   - Utilisez `scp` pour copier vos fichiers sur le serveur distant :
+     ```bash
+     scp -r my-php-app user@remote_server_ip:/path/to/deployment/directory
+     ```
+
+5. **Démarrer les conteneurs sur le serveur distant** :
+   - Connectez-vous à votre serveur distant et naviguez jusqu'au répertoire où vous avez transféré les fichiers.
+   - Exécutez les commandes Docker pour démarrer l'application :
+     ```bash
+     cd /path/to/deployment/directory/my-php-app
+     docker-compose up --build -d
+     ```
+
+6. **Configurer le firewall et les ports** :
+   - Assurez-vous que les ports nécessaires sont ouverts sur votre serveur. Vous pouvez utiliser `ufw` pour configurer le firewall :
+     ```bash
+     sudo ufw allow 80/tcp
+     sudo ufw allow 3306/tcp
+     sudo ufw enable
+     ```
+
+7. **Accéder à l'application déployée** :
+   - Ouvrez votre navigateur et allez à `http://remote_server_ip` pour accéder à votre application déployée.
+
