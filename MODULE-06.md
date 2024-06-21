@@ -272,9 +272,7 @@
        background-color: #f4f4f4;
    }
 
-   h
-
-1 {
+   h1{
        text-align: center;
        margin: 20px 0;
    }
