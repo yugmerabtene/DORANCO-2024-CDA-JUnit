@@ -448,3 +448,118 @@ Pour déployer votre application Docker sur un serveur distant, suivez ces étap
 7. **Accéder à l'application déployée** :
    - Ouvrez votre navigateur et allez à `http://remote_server_ip` pour accéder à votre application déployée.
 
+
+----
+
+Déployer  l'application sur AWS, nous allons utiliser Amazon Elastic Beanstalk, un service qui facilite le déploiement et la gestion des applications dans le cloud AWS. Elastic Beanstalk gère automatiquement la capacité, le load balancing, le scaling et la surveillance de votre application.
+
+### Étape 1 : Préparation de l'environnement AWS
+
+1. **Créer un compte AWS** :
+   - Si vous n'avez pas encore de compte AWS, rendez-vous sur [AWS](https://aws.amazon.com/) et créez un compte.
+
+2. **Configurer AWS CLI** :
+   - Installez AWS CLI sur votre machine locale. Suivez les instructions d'installation ici : [AWS CLI Installation](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
+   - Configurez AWS CLI avec vos identifiants :
+     ```bash
+     aws configure
+     ```
+   - Entrez votre AWS Access Key, AWS Secret Access Key, région par défaut (par exemple, `us-west-2`), et le format de sortie par défaut (`json`).
+
+### Étape 2 : Préparer l'application pour Elastic Beanstalk
+
+1. **Créer un fichier Docker pour Elastic Beanstalk** :
+   - Elastic Beanstalk utilise un fichier `Dockerrun.aws.json` pour déployer des applications Docker multi-containers. Créez ce fichier à la racine de votre projet avec le contenu suivant :
+     ```json
+     {
+       "AWSEBDockerrunVersion": 2,
+       "containerDefinitions": [
+         {
+           "name": "web",
+           "image": "web_image_name",
+           "essential": true,
+           "memory": 128,
+           "portMappings": [
+             {
+               "containerPort": 80,
+               "hostPort": 80
+             }
+           ],
+           "links": ["db"]
+         },
+         {
+           "name": "db",
+           "image": "mysql:5.7",
+           "essential": true,
+           "environment": [
+             {
+               "name": "MYSQL_ROOT_PASSWORD",
+               "value": "root"
+             },
+             {
+               "name": "MYSQL_DATABASE",
+               "value": "testdb"
+             },
+             {
+               "name": "MYSQL_USER",
+               "value": "user"
+             },
+             {
+               "name": "MYSQL_PASSWORD",
+               "value": "password"
+             }
+           ],
+           "memory": 128,
+           "portMappings": [
+             {
+               "containerPort": 3306,
+               "hostPort": 3306
+             }
+           ]
+         }
+       ]
+     }
+     ```
+   - Remplacez `"web_image_name"` par le nom de votre image Docker pour le service web.
+
+2. **Construire et pousser vos images Docker sur Amazon ECR** :
+   - Créez un référentiel Amazon ECR pour stocker vos images Docker. Suivez les instructions ici : [Amazon ECR](https://docs.aws.amazon.com/AmazonECR/latest/userguide/repository-create.html).
+   - Authentifiez-vous auprès de votre registre Amazon ECR :
+     ```bash
+     aws ecr get-login-password --region <your-region> | docker login --username AWS --password-stdin <your-account-id>.dkr.ecr.<your-region>.amazonaws.com
+     ```
+   - Taggez et poussez votre image Docker vers Amazon ECR :
+     ```bash
+     docker tag web_image_name:latest <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/web_image_name:latest
+     docker push <your-account-id>.dkr.ecr.<your-region>.amazonaws.com/web_image_name:latest
+     ```
+
+### Étape 3 : Déployer l'application sur Elastic Beanstalk
+
+1. **Installer EB CLI** :
+   - Elastic Beanstalk CLI (EB CLI) simplifie les déploiements. Suivez les instructions d'installation ici : [EB CLI Installation](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb-cli3-install.html).
+
+2. **Initialiser Elastic Beanstalk** :
+   - À la racine de votre projet, initialisez un nouvel environnement Elastic Beanstalk :
+     ```bash
+     eb init
+     ```
+   - Suivez les instructions pour configurer votre application. Sélectionnez votre région et votre plateforme (Docker).
+
+3. **Créer un environnement Elastic Beanstalk** :
+   - Créez un nouvel environnement pour votre application :
+     ```bash
+     eb create my-app-env
+     ```
+
+4. **Déployer votre application** :
+   - Déployez votre application dans l'environnement Elastic Beanstalk :
+     ```bash
+     eb deploy
+     ```
+
+5. **Vérifier le déploiement** :
+   - Une fois le déploiement terminé, vous pouvez accéder à votre application via l'URL fournie par Elastic Beanstalk :
+     ```bash
+     eb open
+     ```
