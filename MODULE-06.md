@@ -1,3 +1,46 @@
+### Présentation de Docker
+
+#### Qu'est-ce que Docker ?
+
+Docker est une plateforme logicielle qui permet de créer, déployer et exécuter des applications facilement grâce à la technologie des conteneurs. Les conteneurs encapsulent une application avec toutes ses dépendances, bibliothèques et configurations nécessaires pour fonctionner, garantissant ainsi que l'application s'exécute de manière identique quel que soit l'environnement.
+
+#### Historique
+
+Docker a été lancé en 2013 par la société Docker, Inc. Depuis, il est devenu un standard de facto pour le développement et le déploiement de logiciels en conteneurs. Il a considérablement influencé l'industrie informatique en simplifiant le processus de gestion des environnements applicatifs.
+
+#### Principales Composantes de Docker
+
+1. **Docker Engine** : Le moteur Docker est le cœur de la plateforme, permettant la construction et l'exécution des conteneurs. Il se compose du serveur Docker (daemon), de l'API REST et du client CLI Docker.
+
+2. **Images Docker** : Une image Docker est un modèle en lecture seule utilisé pour créer des conteneurs. Une image contient tout ce dont une application a besoin pour fonctionner : code, runtime, bibliothèques, variables d'environnement et fichiers de configuration.
+
+3. **Conteneurs Docker** : Les conteneurs sont des instances en cours d'exécution d'images Docker. Ils sont légers, portables et isolés, offrant une alternative plus efficace que les machines virtuelles traditionnelles.
+
+4. **Docker Hub** : Docker Hub est un registre public où les développeurs peuvent stocker et partager des images Docker. Il permet également de trouver des images pré-construites pour divers logiciels et services.
+
+5. **Docker Compose** : Un outil permettant de définir et de gérer des applications multi-conteneurs. Avec Docker Compose, vous pouvez utiliser un fichier YAML pour configurer les services de votre application.
+
+#### Avantages de Docker
+
+- **Portabilité** : Les conteneurs peuvent être exécutés de manière cohérente sur n'importe quel environnement qui supporte Docker.
+- **Isolation** : Chaque conteneur fonctionne de manière isolée, ce qui réduit les conflits entre les dépendances des applications.
+- **Efficacité** : Les conteneurs partagent le noyau du système hôte, ce qui les rend plus légers et plus rapides à démarrer que les machines virtuelles.
+- **Scalabilité** : Docker facilite le déploiement et la gestion d'applications distribuées et microservices, permettant une mise à l'échelle simple et efficace.
+
+#### Cas d'Utilisation
+
+- **Développement et Test** : Les développeurs utilisent Docker pour créer des environnements de développement consistants et isolés.
+- **Déploiement en Production** : Docker simplifie le déploiement des applications en fournissant un environnement cohérent entre le développement, les tests et la production.
+- **Microservices** : Docker est idéal pour la mise en œuvre de l'architecture microservices, où chaque service est isolé et peut être déployé indépendamment.
+- **CI/CD** : Docker est souvent utilisé dans les pipelines d'intégration et de déploiement continu pour garantir que les applications sont testées et déployées dans un environnement propre et reproductible.
+
+Pour plus d'informations, vous pouvez consulter la documentation officielle de Docker : [Docker Documentation](https://docs.docker.com/).
+
+
+![Sans titre](https://github.com/yugmerabtene/DORANCO-2024-CDA-JUnit/assets/3670077/85d50457-0f60-4548-9037-7fc768638e6d)
+
+
+
 ### Installation de Docker sur votre PC
 
 1. **Télécharger Docker Desktop** :
